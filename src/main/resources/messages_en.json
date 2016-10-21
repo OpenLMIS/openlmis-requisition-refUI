@@ -80,8 +80,6 @@
   "msg.rnr.submitted.success": "R&R submitted successfully!",
   "msg.rnr.authorized.success": "R&R authorized successfully!",
   "msg.rnr.authorized.failure": "R&R authorize failed!",
-  "msg.rnr.deletion.failure": "R&R deleted successfully!",
-  "msg.rnr.deletion.failure": "R&R deletion failed!",
   "msg.rnr.approved.success": "R&R approved successfully!",
   "msg.rnr.not.started": "Not yet started",
   "msg.rnr.get.user.info.error": "Cannot retrieve user info",
@@ -2692,5 +2690,6 @@
   "label.facility.submitted.date": "Submitted Date",
   "label.vaccine.no.pending.periods": "There are no pending periods for this facility.",
   "label.vaccine.no.ivd.reports.to.view": "There are no monthly vaccine reports to view for this facility. Please check if the facility you selected has started reporting.",
-  "link.reports.admin": "Admin Reports"
+  "link.reports.admin": "Admin Reports",
+  "label.add.loss.adjustment": "Add new Loss/Adjustment"
 }
