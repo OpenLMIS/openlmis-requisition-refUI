@@ -1773,6 +1773,12 @@ input[placeholder].placeholder {
   }
 }
 
+.ui-grid-tree-header-row .ui-grid-cell {
+    background-color: $heading-green !important;
+    border: none !important;
+    color: white !important;
+}
+
 .orderNumber {
   white-space: pre;
 }
