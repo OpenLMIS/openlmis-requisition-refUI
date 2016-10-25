@@ -1587,7 +1587,7 @@ td .close {
   top: 0;
   left: 0;
   z-index: 1000;
-  background: transparent url('../images/loader.gif') 50% 50% no-repeat;
+  background: rgba(255,255,255,0.6) url('../images/loader.gif') 50% 50% no-repeat;
 }
 
 .view-req-form {
