@@ -14,12 +14,6 @@ var app = angular.module('openlmis-core', ['openlmis.services', 'angular-google-
     var interceptor = ['$q', '$window', 'loginConfig', function ($q, $window, loginConfig) {
       var requestCount = 0;
 
-      function responseSuccess(response) {
-        if (!(--requestCount))
-          angular.element('#loader').hide();
-        return response;
-      }
-
       function responseError(response) {
         if (!(--requestCount))
           angular.element('#loader').hide();
@@ -46,7 +40,6 @@ var app = angular.module('openlmis-core', ['openlmis.services', 'angular-google-
 
       return {
         'request': request,
-        'response': responseSuccess,
         'responseError': responseError
       };
     }];
