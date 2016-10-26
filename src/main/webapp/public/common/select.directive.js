@@ -10,12 +10,12 @@
                 ngModel: '=ngModel',
                 onChange: '&?onChange',
                 items: '=items',
-                placeholder: '@placeholder'
+                placeholder: '@?placeholder',
+                fieldDisplayed:'@fieldDisplayed'
             },
             restrict: 'EA',
-
             templateUrl: 'common/select.html',
-            controller: 'SelectController',
+            controller: 'SelectController'
         };
     }
 })();

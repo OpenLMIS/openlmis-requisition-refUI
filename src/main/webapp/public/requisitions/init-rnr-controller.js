@@ -20,6 +20,12 @@
 
         $scope.selectedRnrType = {"name": messageService.get("requisition.type.regular"), "emergency": false}; // TODO emergency (for now always false)
 
+        $scope.programs = [
+        {"name": "drugi", "id": 2},
+        {"name": "pierwszy", "id": 1},
+        {"name": "trzeci", "id": 3}
+        ];
+
         $scope.rnrTypes = {"types": [
             {"name": messageService.get("requisition.type.regular"), "emergency": false},
              {"name": messageService.get("requisition.type.emergency"), "emergency": true}
