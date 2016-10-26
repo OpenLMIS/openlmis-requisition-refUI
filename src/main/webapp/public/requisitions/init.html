@@ -27,7 +27,8 @@
                         on-change="loadPeriods()"
                         items="programs"
                         placeholder="{{ programOptionMessage() }}"
-                        field-displayed="name"></openlmis-select>
+                        field-displayed="name"
+                        repeat="item in items | orderBy:'id'"></openlmis-select>
       <!-- <select placeholder="{{ programOptionMessage() }}"
         id="programListMyFacility"
         ng-model="selectedProgram" ng-change="loadPeriods()"

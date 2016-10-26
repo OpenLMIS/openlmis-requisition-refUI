@@ -11,7 +11,8 @@
                 onChange: '&?onChange',
                 items: '=items',
                 placeholder: '@?placeholder',
-                fieldDisplayed:'@fieldDisplayed'
+                fieldDisplayed:'@fieldDisplayed',
+                repeat: '@repeat'
             },
             restrict: 'EA',
             templateUrl: 'common/select.html',
