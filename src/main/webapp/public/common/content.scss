@@ -1590,14 +1590,15 @@ td .close {
 }
 
 img[src="/public/images/loader.gif"] {
-  position: absolute;
+  position: fixed;
   background: white;
   padding: 3px;
-  left: 50%;
   top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border:1px solid #aaa;
   border-radius: 5px;
-  box-shadow: 5px 5px 30px #aaa
+  box-shadow: 0px 0px 10px #aaa
 }
 
 .view-req-form {
