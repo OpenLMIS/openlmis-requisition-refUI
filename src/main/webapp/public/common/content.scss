@@ -1586,8 +1586,18 @@ td .close {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
-  background: rgba(255,255,255,0.6) url('../images/loader.gif') 50% 50% no-repeat;
+  background: rgba(255,255,255,0.6);
+}
+
+img[src="/public/images/loader.gif"] {
+  position: absolute;
+  background: white;
+  padding: 3px;
+  left: 50%;
+  top: 50%;
+  border:1px solid #aaa;
+  border-radius: 5px;
+  box-shadow: 5px 5px 30px #aaa
 }
 
 .view-req-form {
