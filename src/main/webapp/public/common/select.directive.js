@@ -7,14 +7,17 @@
     function select($parse){
         return {
             scope: {
+                id: "@id",
                 ngModel: '=ngModel',
                 onChange: '&?onChange',
                 items: '=items',
                 placeholder: '@?placeholder',
                 fieldDisplayed:'@fieldDisplayed',
-                repeat: '@repeat'
+                orderBy: '@?',
+                trackBy: '@?',
             },
-            restrict: 'EA',
+            replace: true,
+            restrict: 'E',
             templateUrl: 'common/select.html',
             controller: 'SelectController'
         };

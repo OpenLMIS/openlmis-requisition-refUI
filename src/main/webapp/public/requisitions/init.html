@@ -28,7 +28,8 @@
                         items="programs"
                         placeholder="{{ programOptionMessage() }}"
                         field-displayed="name"
-                        repeat="item in items | orderBy:'id'"></openlmis-select>
+                        order-by="id"
+                        track-by="name"></openlmis-select>
       <!-- <select placeholder="{{ programOptionMessage() }}"
         id="programListMyFacility"
         ng-model="selectedProgram" ng-change="loadPeriods()"
