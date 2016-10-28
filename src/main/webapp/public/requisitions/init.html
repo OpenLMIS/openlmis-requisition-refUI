@@ -21,15 +21,13 @@
     </div>
     <div class="form-group">
       <label for="programListMyFacility" openlmis-message="label.program"></label>
-        selectedBy: {{selectedProgram}}<br/>
-       <openlmis-select id="programListMyFacility"
-                        ng-model="selectedProgram"
-                        on-change="loadPeriods()"
-                        items="programs"
-                        placeholder="{{ programOptionMessage() }}"
-                        field-displayed="name"
-                        order-by="id"
-                        track-by="name"></openlmis-select>
+         <openlmis-select id="programListMyFacility"
+                  ng-model="selectedProgram"
+                  items="programs"
+                  placeholder="{{ programOptionMessage() }}"
+                  field-displayed="name"
+                  order-by="id"
+                  track-by="name"></openlmis-select>
       <!-- <select placeholder="{{ programOptionMessage() }}"
         id="programListMyFacility"
         ng-model="selectedProgram" ng-change="loadPeriods()"

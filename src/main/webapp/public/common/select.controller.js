@@ -8,11 +8,6 @@
         $scope.selected = {};
         $scope.ngModel = $scope.selected;
 
-
-        $scope.selectedChanged = function() {
-            $scope.onChange();
-        }
-
         if ($scope.items.length < 11) {
             $scope.searchEnabled = false;
         } else {

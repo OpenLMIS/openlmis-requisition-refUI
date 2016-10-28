@@ -9,7 +9,6 @@
             scope: {
                 id: "@id",
                 ngModel: '=ngModel',
-                onChange: '&?onChange',
                 items: '=items',
                 placeholder: '@?placeholder',
                 fieldDisplayed:'@fieldDisplayed',
