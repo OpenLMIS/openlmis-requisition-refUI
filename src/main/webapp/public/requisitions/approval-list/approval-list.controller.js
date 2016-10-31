@@ -24,8 +24,10 @@
     ];
 
     $scope.$watch('searchField.item', function() {
-                $scope.filterRequisitions();
-            }, true);
+        if($scope.searchField.item) {
+            $scope.filterRequisitions();
+        }
+    }, true);
 
     $scope.gridOptions = { data: 'filteredRequisitions',
       showFooter: false,
@@ -51,6 +53,10 @@
       ]
     };
 
+    $scope.typeOptionMessage = function () {
+        return  messageService.get("label.select.type");
+    }
+
     $scope.openRnr = function (row) {
       $state.go('requisitions.requisition', {
         rnr: row.entity.id
@@ -60,10 +66,10 @@
     $scope.filterRequisitions = function () {
       $scope.filteredRequisitions = [];
       var query = $scope.query || "";
-      var searchField = $scope.searchField;
+      var searchField = $scope.searchField.item.value;
 
       $scope.filteredRequisitions = $.grep($scope.requisitions, function (rnr) {
-        return (searchField.item.value) ? contains(getFieldValue(rnr,searchField.item.value),
+        return (searchField) ? contains(getFieldValue(rnr,searchField),
         query) :
         matchesAnyField(query, rnr);
       });
