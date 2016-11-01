@@ -20,12 +20,14 @@
 		'openlmis-auth',
 		'openlmis-dashboard',
 		'openlmis.requisitions',
-		'rnr', 
-		'requisitionGroup', 
 		'createRnRTemplate', 
 		'resetPassword', 
 		'ui.router',
-		'ui.grid'
+		'ui.grid',
+		'angularjs-dropdown-multiselect',
+		'ui.bootstrap.datetimepicker',
+		'ui.bootstrap',
+		'ui.bootstrap.dropdown'
 		]).config(defaultRoutes);
 
 	defaultRoutes.$inject = ['$urlRouterProvider'];

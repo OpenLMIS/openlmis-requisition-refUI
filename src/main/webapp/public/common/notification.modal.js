@@ -16,8 +16,7 @@
 
         $templateRequest('common/notification-modal.html').then(function(html){
 
-            var isClosed = false,
-                dialog = bootbox.dialog({
+            var dialog = bootbox.dialog({
                     message: $compile(html)(scope),
                     className: 'notification-modal',
                     backdrop: true,
