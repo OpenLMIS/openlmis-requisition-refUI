@@ -24,7 +24,7 @@
     ];
 
     $scope.$watch('searchField.item', function() {
-        if($scope.searchField.item) {
+        if($scope.searchField) {
             $scope.filterRequisitions();
         }
     }, true);
