@@ -9,42 +9,7 @@
  */
 
 
-var app = angular.module('openlmis-core', ['openlmis.services', 'angular-google-analytics', 'openlmis.localStorage', 'ui.directives', 'ngCookies', 'ngRoute'],
-  function ($httpProvider) {
-    var interceptor = ['$q', '$window', 'loginConfig', function ($q, $window, loginConfig) {
-      var requestCount = 0;
-
-      function responseError(response) {
-        if (!(--requestCount))
-          angular.element('#loader').hide();
-        switch (response.status) {
-          case 403:
-            $window.location = "/public/pages/access-denied.html";
-            break;
-          case 401:
-            loginConfig.preventReload = (response.config.method != 'GET');
-            loginConfig.modalShown = true;
-            break;
-          default:
-            break;
-        }
-        return $q.reject(response);
-      }
-
-      function request(config) {
-        if ((++requestCount) > 0)
-          angular.element('#loader').show();
-        config.headers["X-Requested-With"] = "XMLHttpRequest";
-        return config;
-      }
-
-      return {
-        'request': request,
-        'responseError': responseError
-      };
-    }];
-    $httpProvider.interceptors.push(interceptor);
-  });
+var app = angular.module('openlmis-core', ['openlmis.services', 'angular-google-analytics', 'openlmis.localStorage', 'ui.directives', 'ngCookies', 'ngRoute']);
 
 app.value("loginConfig", {modalShown: false, preventReload: false});
 
