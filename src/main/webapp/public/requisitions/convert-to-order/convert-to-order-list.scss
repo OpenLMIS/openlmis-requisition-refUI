@@ -1,0 +1,43 @@
+.convert-to-order-list {
+
+	.page {
+
+		& > h2,
+		.info-message {
+			width: 100%;
+		}
+
+		& > * {
+			float: left;
+			margin-bottom: 10px;
+		}
+	}
+
+	button.convert-to-order {
+		@include button-color($green);
+		float: right;
+	}
+
+	.page {
+		overflow: hidden;
+	}
+
+	.info-message {
+		@extend .alert;
+		@extend .alert-info;
+	}
+
+	.filters {
+		width: 25%;
+		float: right;
+
+		.filter-by {
+			width: auto;
+		}
+
+		button.search {
+			@include button-color($green);
+		}
+	}
+
+}

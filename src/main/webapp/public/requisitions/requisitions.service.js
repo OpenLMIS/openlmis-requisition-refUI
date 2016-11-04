@@ -1,5 +1,5 @@
 (function() {
-  
+
     'use strict';
 
     angular
@@ -19,6 +19,16 @@
                 url: RequisitionURL('/api/requisitions/search'),
                 method: 'GET',
                 isArray: true
+            },
+            'forConvert': {
+                url: RequisitionURL('/api/requisitions/requisitionsForConvert'),
+                method: 'GET',
+                isArray: true
+            },
+            'convertToOrder': {
+                url: RequisitionURL('/api/orders/requisitions'),
+                method: 'POST',
+                transformRequest: transformRequest
             }
         });
 
@@ -26,7 +36,9 @@
             get: get,
             initiate: initiate,
             search: search,
-            advancedSearch: advancedSearch
+            advancedSearch: advancedSearch,
+            forConvert: forConvert,
+            convertToOrder: convertToOrder
         };
         return service;
 
@@ -63,6 +75,24 @@
             return resource.search(searchParams).$promise; 
         }
 
+        function forConvert(params) {
+            return resource.forConvert(params).$promise;
+        }
+
+        function convertToOrder(requisitions) {
+            return resource.convertToOrder(requisitions).$promise;
+        }
+
+        function transformRequest(requisitionsWithDepots) {
+            var body = [];
+            angular.forEach(requisitionsWithDepots, function(requisitionWithDepots) {
+                body.push({
+                    requisitionId: requisitionWithDepots.requisition.id,
+                    supplyingDepotId: requisitionWithDepots.requisition.supplyingFacility
+                });
+            });
+            return angular.toJson(body);
+        }
     }
 
 })();
