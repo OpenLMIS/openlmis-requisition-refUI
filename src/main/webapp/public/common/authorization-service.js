@@ -18,7 +18,8 @@
     'ACCESS_TOKEN': 'ACCESS_TOKEN',
     'USER_ID': 'USER_ID',
     'USERNAME': 'USERNAME',
-    'USER_RIGHTS': 'RIGHTS'
+    'USER_RIGHTS': 'RIGHTS',
+    'USER_ROLE_ASSIGNMENTS': 'ROLE_ASSIGNMENTS'
   };
 
   AuthorizationService.$inject = ["$q", "localStorageService", "$injector"]
@@ -43,6 +44,9 @@
     service.getRights = getRights;
     service.setRights = setRights;
     service.clearRights = clearRights;
+    service.setRoleAssignments = setRoleAssignments;
+    service.getRoleAssignments = getRoleAssignments;
+    service.hasRightNew = hasRightNew;
 
     var clientId, clientSecret;
 
@@ -192,6 +196,33 @@
       localStorageService.add(storageKeys.USER_RIGHTS, rightsJson);
     }
 
+    function setRoleAssignments(roleAssignments) {
+        if(!roleAssignments) roleAssignments = defaultRights;
+        var roleAssignments = JSON.stringify(roleAssignments);
+        localStorageService.add(storageKeys.USER_ROLE_ASSIGNMENTS, roleAssignments);
+    }
+
+    function getRoleAssignments() {
+      var roleAssignments = false;
+      try{
+        var raw = localStorageService.get(storageKeys.USER_ROLE_ASSIGNMENTS);
+        roleAssignments = JSON.parse(raw);
+      } catch (e) {
+        roleAssignments = [];
+      }
+      return roleAssignments;
+    }
+
+    // todo hasRight should check not only name, but also programCode, supervisoryNodeCode, warehouseCode if provided
+    function hasRightNew(permissions) {
+      var roleAssignments = getRoleAssignments();
+      // todo after adding proper roleAssignments endpoint in login.service.js: 'name' -> 'role'
+      var rightNames = _.pluck(_.flatten(_.pluck(roleAssignments, 'rights')), 'name'); // gets rights from roles, then gets names from roles
+      var hasRight = _.intersection(permissions, rightNames);
+
+      return hasRight.length > 0 ? true : false;
+    }
+
     /**
      * @ngdoc function
      * @name  clearRights
@@ -207,12 +238,8 @@
       var rights = getRights();
       var rightNames = _.pluck(rights, 'name');
       var hasRight = _.intersection(permissions, rightNames);
-      
-      if(hasRight.length > 0){
-        return true;
-      } else {
-        return false;
-      }
+
+      return hasRight.length > 0 ? true : false;
     };
 
     function preAuthorize() {

@@ -13,8 +13,8 @@
   angular.module('openlmis-auth')
       .service('LoginService', LoginService);
 
-  LoginService.$inject = ["$q", "$http", "AuthURL", "AuthorizationService"];
-  function LoginService($q, $http, AuthURL, AuthorizationService){
+  LoginService.$inject = ["$q", "$http", "AuthURL", "AuthorizationService", "OpenlmisURL"];
+  function LoginService($q, $http, AuthURL, AuthorizationService, OpenlmisURL){
       var service = {};
 
       service.login = login;
@@ -70,7 +70,7 @@
             }).success(function(data) {
               AuthorizationService.setAccessToken(data.access_token);
 
-              getUserInfo(data.referenceDataUserId).then(function(){
+              getUserInfo(data.referenceDataUserId).then(function() {
                   deferred.resolve();
               }).catch(function(){
                   AuthorizationService.clearAccessToken();
@@ -133,10 +133,40 @@
               }).success(function(data) {
                   AuthorizationService.setUser(userId, data.username);
                   AuthorizationService.setRights(data.rights);
+                  getUserRights(userId);
 
                   deferred.resolve();
               }).error(function(data) {
                   deferred.reject();    
+              });
+          }
+          return deferred.promise;
+      }
+
+      function getUserRights(userId) {
+          var deferred = $q.defer();
+
+          if(!AuthorizationService.isAuthenticated()) {
+              deferred.reject();
+          } else {
+              var userRoleAssignmentsURL = OpenlmisURL(
+                  '/referencedata/api/roles'
+              );
+              $http({
+                  method: 'GET',
+                  url: userRoleAssignmentsURL,
+                  headers: {
+                      "Content-Type": "application/json"
+                  }
+              }).success(function(data) {
+                  AuthorizationService.setRoleAssignments(data);
+                  var array = ["REQUISITION_VIEW"];
+                  //for testing purposes:
+                  AuthorizationService.hasRightNew(array);
+
+                  deferred.resolve();
+              }).error(function(data) {
+                  deferred.reject();
               });
           }
           return deferred.promise;
