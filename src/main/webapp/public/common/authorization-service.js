@@ -169,7 +169,6 @@
      * @param {Array} An array of user's role assignments
      */
     function setRoleAssignments(roleAssignments) {
-        if(!roleAssignments) roleAssignments = defaultRoleAssignments;
         var roleAssignments = JSON.stringify(roleAssignments);
         localStorageService.add(storageKeys.USER_ROLE_ASSIGNMENTS, roleAssignments);
     }
@@ -235,50 +234,5 @@
 
     return service;
   }
-
-  //todo change into proper roleAssignments
-  var defaultRoleAssignments = [{
-    "name": "DELETE_REQUISITION",
-    "type": "REQUISITION"
-  }, {
-    "name": "MANAGE_DISTRIBUTION",
-    "type": "ALLOCATION"
-  }, {
-    "name": "CREATE_REQUISITION",
-    "type": "REQUISITION"
-  }, {
-    "name": "VIEW_ORDER",
-    "type": "FULFILLMENT"
-  }, {
-    "name": "MANAGE_EQUIPMENT_INVENTORY",
-    "type": "REQUISITION"
-  }, {
-    "name": "MANAGE_STOCK",
-    "type": "REQUISITION"
-  }, {
-    "name": "AUTHORIZE_REQUISITION",
-    "type": "REQUISITION"
-  }, {
-    "name": "VIEW_REQUISITION",
-    "type": "REQUISITION"
-  }, {
-    "name": "APPROVE_REQUISITION",
-    "type": "REQUISITION"
-  }, {
-    "name": "FACILITY_FILL_SHIPMENT",
-    "type": "FULFILLMENT"
-  }, {
-    "name": "MANAGE_POD",
-    "type": "FULFILLMENT"
-  }, {
-    "name": "VIEW_STOCK_ON_HAND",
-    "type": "REQUISITION"
-  }, {
-    "name": "MANAGE_SUPERVISED_EQUIPMENTS",
-    "type": "REQUISITION"
-  }, {
-    "name": "CONVERT_TO_ORDER",
-    "type": "FULFILLMENT"
-  }];
 
  })();
