@@ -19,21 +19,13 @@
      * @description
      * Allows user to perform operations on program resource.
      */
-    angular.module('openlmis.administration').factory('Program', Program);
+    angular.module('openlmis.administration').factory('programFactory', programFacotry);
 
-    Program.$inject = ['OpenlmisURL', '$resource', '$q', 'RequisitionTemplate'];
+    programFacotry.$inject = ['$q', 'templateDataService', 'programDataService'];
 
-    function Program(OpenlmisURL, $resource, $q, RequisitionTemplate) {
+    function programFacotry($q, templateDataService, programDataService) {
 
-        var resource = $resource(OpenlmisURL('/referencedata/api/programs/:id'), {}, {
-            'getAll': {
-                url: OpenlmisURL('/referencedata/api/programs'),
-                method: 'GET',
-                isArray: true
-            }
-        }),
-
-        factory = {
+        var factory = {
             get: get,
             getAll: getAll
         };
@@ -52,7 +44,7 @@
          * Gets program by id.
          */
         function get(id) {
-            return resource.get({id: id}).$promise;
+            return programDataService.get(id);
         }
 
         /**
@@ -66,7 +58,7 @@
          */
         function getAll() {
             var deferred = $q.defer();
-            resource.getAll().$promise.then(function(programs) {
+            programDataService.getAll().then(function(programs) {
                 getProgramTemplates(programs).then(function(items) {
                     deferred.resolve(items);
                 }, function() {
@@ -80,7 +72,7 @@
 
         function getProgramTemplates(programs) {
             var deferred = $q.defer();
-            RequisitionTemplate.getAll().then(function(templates) {
+            templateDataService.getAll().then(function(templates) {
                 angular.forEach(programs, function(program, programIdx) {
                     angular.forEach(templates, function(template, templateIdx) {
                         if(program.id === template.programId) {

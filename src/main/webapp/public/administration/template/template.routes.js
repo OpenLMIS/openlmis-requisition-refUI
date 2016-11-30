@@ -23,10 +23,10 @@
 			controller: 'TemplateController',
 			templateUrl: 'administration/template/template.html',
 			resolve: {
-				requisition: function ($location, $q, $stateParams, RequisitionTemplate) {
+				requisition: function ($location, $q, $stateParams, templateDataService) {
 					var deferred = $q.defer();
 
-					RequisitionTemplate.get($stateParams.template).then(function(response) {
+					templateDataService.get($stateParams.template).then(function(response) {
 						deferred.resolve(response);
 					}, function(response) {
 						deferred.reject();
@@ -45,8 +45,8 @@
 			controller: 'TemplateListController',
 			templateUrl: 'administration/template/template-list/template-list.html',
 			resolve: {
-				programList: function (Program) {
-					return Program.getAll();
+				programList: function (programFactory) {
+					return programFactory.getAll();
 				}
 			}
 		});

@@ -3,7 +3,8 @@
 	"use strict";
 
 	angular.module('openlmis.administration', [
-	    'openlmis-core',
+		'openlmis.requisitions.api',
+		'openlmis.referencedata.api',
 	    'ui.router',
    	]);
 
