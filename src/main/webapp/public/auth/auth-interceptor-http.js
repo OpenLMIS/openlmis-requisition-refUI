@@ -89,7 +89,7 @@
                 if (response.status === 401) {
                     AuthorizationService.clearAccessToken();
                     AuthorizationService.clearUser();
-                    AuthorizationService.clearRights();
+                    AuthorizationService.clearRoleAssignments();
                 } else if (response.status === 403) {
                     $injector.get('Alert').error('error.authorization');
                 } else if(response.status === 500) {

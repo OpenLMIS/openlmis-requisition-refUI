@@ -41,12 +41,10 @@
     service.clearUser = clearUser;
     service.getDetailedUser = getDetailedUser;
 
-    service.getRights = getRights;
-    service.setRights = setRights;
-    service.clearRights = clearRights;
+    service.clearRoleAssignments = clearRoleAssignments;
     service.setRoleAssignments = setRoleAssignments;
     service.getRoleAssignments = getRoleAssignments;
-    service.hasRightNew = hasRightNew;
+    service.hasRight = hasRight;
 
     var clientId, clientSecret;
 
@@ -165,43 +163,26 @@
 
     /**
      * @ngdoc function
-     * @name  getRights
+     * @name setRoleAssignments
      * @methodOf openlmis-common.AuthorizationService
      *
-     * @description Reads local storages to set a list of the user's rights
-     * 
-     * @return {Array} List of the user's rights
+     * @param {Array} An array of user's role assignments
      */
-    function getRights(){
-      var rights = false;
-      try{
-        var raw = localStorageService.get(storageKeys.USER_RIGHTS);
-        rights = JSON.parse(raw);
-      } catch (e) {
-        rights = [];
-      }
-      return rights;
-    }
-
-    /**
-     * @ngdoc function
-     * @name  setRights
-     * @methodOf openlmis-common.AuthorizationService
-     * 
-     * @param {Array} An array of the user's rights
-     */
-    function setRights(rights){
-      if(!rights) rights = defaultRights;
-      var rightsJson = JSON.stringify(rights);
-      localStorageService.add(storageKeys.USER_RIGHTS, rightsJson);
-    }
-
     function setRoleAssignments(roleAssignments) {
-        if(!roleAssignments) roleAssignments = defaultRights;
+        if(!roleAssignments) roleAssignments = defaultRoleAssignments;
         var roleAssignments = JSON.stringify(roleAssignments);
         localStorageService.add(storageKeys.USER_ROLE_ASSIGNMENTS, roleAssignments);
     }
 
+    /**
+     * @ngdoc function
+     * @name  getRoleAssignments
+     * @methodOf openlmis-common.AuthorizationService
+     *
+     * @description Reads local storages to set a list of the user's role assignments
+     *
+     * @return {Array} List of the user's role assignment
+     */
     function getRoleAssignments() {
       var roleAssignments = false;
       try{
@@ -214,7 +195,7 @@
     }
 
     // todo hasRight should check not only name, but also programCode, supervisoryNodeCode, warehouseCode if provided
-    function hasRightNew(permissions) {
+    function hasRight(permissions) {
       var roleAssignments = getRoleAssignments();
       var rightNames = _.pluck(_.flatten(_.pluck(_.pluck(roleAssignments, 'role'), 'rights')), 'name');
       var hasRight = _.intersection(permissions, rightNames);
@@ -224,22 +205,14 @@
 
     /**
      * @ngdoc function
-     * @name  clearRights
+     * @name  clearRoleAssignments
      * @methodOf openlmis-common.AuthorizationService
      *
-     * @description Removes user rights from local storage
+     * @description Removes user role assignments from local storage
      */
-    function clearRights(){
-      localStorageService.remove(storageKeys.USER_RIGHTS); 
+    function clearRoleAssignments(){
+      localStorageService.remove(storageKeys.USER_ROLE_ASSIGNMENTS);
     }
-
-    function hasRight(permissions){
-      var rights = getRights();
-      var rightNames = _.pluck(rights, 'name');
-      var hasRight = _.intersection(permissions, rightNames);
-
-      return hasRight.length > 0 ? true : false;
-    };
 
     function preAuthorize() {
       var permissions = Array.prototype.slice.call(arguments);
@@ -262,8 +235,9 @@
 
     return service;
   }
-  
-  var defaultRights = [{
+
+  //todo change into proper roleAssignments
+  var defaultRoleAssignments = [{
     "name": "DELETE_REQUISITION",
     "type": "REQUISITION"
   }, {

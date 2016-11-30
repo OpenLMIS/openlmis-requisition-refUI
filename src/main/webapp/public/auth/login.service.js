@@ -111,7 +111,7 @@
 
           AuthorizationService.clearAccessToken();
           AuthorizationService.clearUser();
-          AuthorizationService.clearRights();
+          AuthorizationService.clearRoleAssignments();
 
           deferred.resolve();
         }).catch(function(data){
@@ -138,7 +138,6 @@
                   }
               }).success(function(data) {
                   AuthorizationService.setUser(userId, data.username);
-                  AuthorizationService.setRights(data.rights);
                   getUserRights(userId);
 
                   deferred.resolve();
@@ -168,9 +167,6 @@
                   }
               }).success(function(data) {
                   AuthorizationService.setRoleAssignments(data);
-                  var array = ["REQUISITION_VIEW"];
-                  //for testing purposes:
-                  AuthorizationService.hasRightNew(array);
 
                   deferred.resolve();
               }).error(function(data) {
