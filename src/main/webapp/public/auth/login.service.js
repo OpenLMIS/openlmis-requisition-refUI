@@ -156,7 +156,9 @@
               deferred.reject();
           } else {
               var userRoleAssignmentsURL = OpenlmisURL(
-                  '/referencedata/api/roles'
+                  '/referencedata/api/users/'
+                  + userId
+                  + '/roleAssignments'
               );
               $http({
                   method: 'GET',

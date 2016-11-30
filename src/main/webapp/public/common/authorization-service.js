@@ -216,8 +216,7 @@
     // todo hasRight should check not only name, but also programCode, supervisoryNodeCode, warehouseCode if provided
     function hasRightNew(permissions) {
       var roleAssignments = getRoleAssignments();
-      // todo after adding proper roleAssignments endpoint in login.service.js: 'name' -> 'role'
-      var rightNames = _.pluck(_.flatten(_.pluck(roleAssignments, 'rights')), 'name'); // gets rights from roles, then gets names from roles
+      var rightNames = _.pluck(_.flatten(_.pluck(_.pluck(roleAssignments, 'role'), 'rights')), 'name');
       var hasRight = _.intersection(permissions, rightNames);
 
       return hasRight.length > 0 ? true : false;
