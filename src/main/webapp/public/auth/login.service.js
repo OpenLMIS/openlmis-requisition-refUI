@@ -71,11 +71,17 @@
               AuthorizationService.setAccessToken(data.access_token);
 
               getUserInfo(data.referenceDataUserId).then(function() {
-                  deferred.resolve();
+                  getUserRights(data.referenceDataUserId).then(function() {
+                      deferred.resolve();
+                  }).catch(function(){
+                      AuthorizationService.clearAccessToken();
+                      deferred.reject();
+                  });
               }).catch(function(){
                   AuthorizationService.clearAccessToken();
                   deferred.reject();
               });
+
             }).error(function(data) {
                 deferred.reject();
             });
