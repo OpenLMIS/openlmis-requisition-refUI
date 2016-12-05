@@ -41,30 +41,13 @@
 			restrict: 'E',
 			replace: true,
 			scope: {
-				rootState: "="
+				states: '=?'
 			},
 			controller: 'NavigationController as NavigationCtrl',
 			templateUrl: 'dashboard/navigation.html',
 			link: function(scope, element, attrs){
-				var states = [];
-				if(scope.rootState && scope.rootState != ""){
-					states = NavigationService.get(scope.rootState);
-				} else {
-					states = NavigationService.getMain();
-				}
-				scope.states = states;
-
-				scope.hasChildStates = function(stateName){
-					var states = NavigationService.get(stateName);
-					if(states.length > 0){
-						return true;
-					} else {
-						return false;
-					}
-				}
-
-				scope.isSubmenu = function(stateName){
-					return !NavigationService.isTopLevel(stateName) && scope.hasChildStates(stateName);
+				if (!scope.states) {
+					scope.states = NavigationService.states;
 				}
 			}
 		}
