@@ -41,6 +41,9 @@
         // if authenticated and on login page
         event.preventDefault();
         $state.go('home');
+      } else if(toState.right && !AuthorizationService.hasRight(toState.right) ) {
+        // if authenticated and on login page
+        event.preventDefault();
       }
     }
 

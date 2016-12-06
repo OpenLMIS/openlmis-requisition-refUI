@@ -13,6 +13,7 @@
         $stateProvider.state('requisitions.convertToOrder', {
             showInNavigation: true,
             label: 'link.requisitions.convertToOrder',
+//            right: 'CONVERT_TO_ORDER',
             url: '/convertToOrder?filterBy&filterValue&sortBy&descending',
             controller: 'ConvertToOrderCtrl',
             templateUrl: 'requisitions/convert-to-order/convert-to-order.html',

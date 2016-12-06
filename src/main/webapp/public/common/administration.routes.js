@@ -30,6 +30,7 @@
 		$stateProvider.state('administration.configure', {
             abstract: true,
             showInNavigation: true,
+//            right: 'CONFIGURE_REQUISITION_TEMPLATES',
             label: 'template.configure',
             url: '/configure',
             template: '<div ui-view></div>'
