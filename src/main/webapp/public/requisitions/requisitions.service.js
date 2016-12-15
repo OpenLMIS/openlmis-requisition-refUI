@@ -15,10 +15,12 @@
 
     requisitionService.$inject = ['$q', '$resource', 'messageService', 'OpenlmisURL',
                                   'RequisitionURL', 'RequisitionFactory', 'Confirm',
-                                  'Notification', 'DateUtils', 'RequisitionStorage'];
+                                  'Notification', 'DateUtils', 'localStorageFactory',
+                                  'OfflineService'];
 
     function requisitionService($q, $resource, messageService, OpenlmisURL, RequisitionURL,
-                                RequisitionFactory, Confirm, Notification, DateUtils, RequisitionStorage) {
+                                RequisitionFactory, Confirm, Notification, DateUtils,
+                                localStorageFactory, OfflineService) {
 
         var resource = $resource(RequisitionURL('/api/requisitions/:id'), {}, {
             'initiate': {
@@ -83,24 +85,33 @@
         function get(id) {
             var deferred = $q.defer();
 
-            resource.get({
-                id: id
-            }).$promise.then(function(requisition) {
-                $q.all([
-                    resource.getTemplate({
-                        program: requisition.program.id
-                    }).$promise,
-                    resource.getApprovedProducts({
-                        id: requisition.facility.id,
-                        fullSupply: false,
-                        programId: requisition.program.id
-                    }).$promise
-                ]).then(function(responses) {
-                    resolve(requisition, responses[0], responses[1]);
-                }, function() {
-                    resolve(requisition);
-                });
-            }, error);
+            if (OfflineService.isOffline) {
+                var requisition = localStorageFactory('requisitions').getBy('id', id),
+                    template = localStorageFactory('templates').getBy('programId', requisition.program.id),
+                    approvedProducts = localStorageFactory('approvedProducts').search({
+                        requisitionId: id
+                    });
+
+                resolve(requisition, template, approvedProducts);
+            } else {
+                getRequisitionPromise(id).then(function(requisition) {
+                    requisition.$availableOffline = !localStorageFactory('onlineOnly').contains(id);
+                    $q.all([
+                        getTemplatePromise(requisition),
+                        getApprovedProductsPromise(requisition)
+                    ]).then(function(responses) {
+                        if (requisition.$availableOffline) {
+                            storeResponses(requisition, responses[0], responses[1]);
+                        }
+                        resolve(requisition, responses[0], responses[1]);
+                    }, function() {
+                        if (requisition.$availableOffline) {
+                            localStorageFactory('requisitions').put(requisition);
+                        }
+                        resolve(requisition);
+                    });
+                }, error);
+            }
 
             return deferred.promise;
 
@@ -234,6 +245,37 @@
             });
 
             return deferred.promise;
+        }
+
+        function getRequisitionPromise(id) {
+            return resource.get({
+                id: id
+            }).$promise;
+        }
+
+        function getTemplatePromise(requisition) {
+            return resource.getTemplate({
+                program: requisition.program.id
+            }).$promise;
+        }
+
+        function getApprovedProductsPromise(requisition) {
+            return resource.getApprovedProducts({
+                id: requisition.facility.id,
+                fullSupply: false,
+                programId: requisition.program.id
+            }).$promise;
+        }
+
+        function storeResponses(requisition, template, approvedProducts) {
+            localStorageFactory('requisitions').put(requisition);
+            localStorageFactory('templates').put(template);
+
+            var approvedProductsOffline = localStorageFactory('approvedProducts');
+            approvedProducts.forEach(function(product) {
+                product.requisitionId = requisition.id;
+                approvedProductsOffline.put(product);
+            });
         }
 
         function transformRequest(requisitionsWithDepots) {
