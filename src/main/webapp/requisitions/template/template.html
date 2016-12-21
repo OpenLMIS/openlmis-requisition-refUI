@@ -49,7 +49,7 @@
                         <td>
                             <div ng-if="!column.$isValid(vm.template.columnsMap)" class="error">{{vm.errorMessage(column)}}</div>
                             <div ng-if="column.name == 'numberOfNewPatientsAdded'">
-                                <select ng-model="column.option" ng-options="option.optionLabel for option in column.columnDefinition.options"></select>
+                                <select ng-model="column.option" ng-options="option as option.optionLabel for option in column.columnDefinition.options"></select>
                             </div>
                         </td>
                     <dnd-nodrag>
