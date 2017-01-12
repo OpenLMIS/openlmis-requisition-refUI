@@ -10,26 +10,6 @@ table .productCategory,
   }
 }
 
-.grid {
-  @include size(400px 100%);
-  border: 0.1em solid rgb(212, 212, 212);
-}
-
-.grid-filters {
-  padding: 0.7em 0 1.4em;
-  text-align: right;
-  display: flex;
-  .search-query {
-    width: 10em;
-    padding: 0.25em 0.4em;
-    margin-top: 0;
-  }
-}
-
-.grid-btn {
-  margin: 0.2em 0.2em;
-}
-
 #viewReqList, #approveReqList {
   .ngRow.odd:hover, .ui-grid-row:hover {
     background-color: lighten($cyan, 45%);
@@ -82,21 +62,6 @@ table .productCategory,
     border-width: 39px 0 39px 15px;
     margin-top: -39px;
   }
-}
-
-.table-container {
-  overflow: auto;
-  table {
-    max-width: 100%;
-    word-wrap: break-word;
-  }
-}
-
-table.search-list {
-  border: 0.1em solid $light-gray;
-  border-left: 0;
-  position: relative;
-  margin: 0.8em 0;
 }
 
 .col-emergency {
