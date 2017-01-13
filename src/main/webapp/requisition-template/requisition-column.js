@@ -81,6 +81,7 @@
                 && source == COLUMN_SOURCES.USER_INPUT);
             this.fullSupplyOnly = nonFullSupplyColumns.indexOf(name) === -1;
             this.dependencies = dependencies[name];
+            this.canChangeOrder = column.columnDefinition.canChangeOrder;
         }
 
         function displayColumn(column, requisition) {

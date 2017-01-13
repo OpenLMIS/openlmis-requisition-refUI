@@ -89,10 +89,12 @@ Styleguide 4.0
 
 table{
     @extend .table;
+    border-collapse: separate;
 
     td, th{
         padding: 1em;
         vertical-align: middle !important; // from requisition template screen
+        border: 1px $gray solid;
     }
 
     td {
@@ -138,7 +140,6 @@ table {
     }
 
     .pinned {
-        position: relative;
+        position: relative !important;
     }
-
 }

@@ -64,11 +64,11 @@
             </fieldset>
             <input class="btn btn-primary" type="submit" value="{{'button.search'|message}}"/>
         </form>
-        <table table-pinned-columns ng-show="vm.selectedProgramId && vm.selectedFacilityId && vm.periodGridData && !(vm.periodGridData.length == 0)">
+        <table ng-show="vm.selectedProgramId && vm.selectedFacilityId && vm.periodGridData && !(vm.periodGridData.length == 0)">
             <thead>
                 <tr>
-                    <th class="pinned">{{'label.periods' | message}}</th>
-                    <th class="pinned">{{'period.header.startDate' | message}}</th>
+                    <th>{{'label.periods' | message}}</th>
+                    <th>{{'period.header.startDate' | message}}</th>
                     <th>{{'period.header.endDate' | message}}</th>
                     <th>{{'label.rnr.status' | message}}</th>
                     <th></th>
@@ -76,8 +76,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="period in vm.periodGridData">
-                    <td class="pinned">{{period.name}}</td>
-                    <td class="pinned">{{period.startDate | date:'dd/MM/yyyy'}}</td>
+                    <td>{{period.name}}</td>
+                    <td>{{period.startDate | date:'dd/MM/yyyy'}}</td>
                     <td>{{period.endDate | date:'dd/MM/yyyy'}}</td>
                     <td>{{period.rnrStatus}}</td>
                     <td>
