@@ -12,7 +12,8 @@
 		</thead>
 		<tbody ng-repeat="(category, lineItems) in vm.categories">
 			<tr>
-				<td class="productCategory pinned" colspan="{{vm.columns.length}}">{{category}}</td>
+				<td class="productCategory pinned" colspan="3">{{category}}</td>
+				<td ng-repeat="column in vm.columns | limitTo:vm.columns.length - 3" class="productCategory"></td>
 			</tr>
 			<tr ng-class="{'invalid-row': !vm.isLineItemValid(lineItem), 'skipped-line-item' : lineItem.skipped}"
 				ng-repeat="lineItem in lineItems | orderBy : 'orderableProduct.name'">

@@ -8,7 +8,8 @@
 		</thead>
 		<tbody ng-repeat="(category, lineItems) in vm.getLineItems() | groupBy:'$program.productCategoryDisplayName'">
 			<tr>
-				<td class="productCategory pinned" colspan="{{vm.columns.length + 1}}">{{category}}</td>
+				<td class="productCategory pinned" colspan="3">{{category}}</td>
+				<td ng-repeat="column in vm.columns | limitTo:vm.columns.length - 3" class="productCategory"></td>
 			</tr>
 			<tr ng-class="{'invalid-row': !vm.isLineItemValid(lineItem)}" ng-repeat="lineItem in lineItems | orderBy : 'orderableProduct.name'">
 				<td ng-repeat="column in vm.columns | orderBy : 'displayOrder'"
