@@ -18,16 +18,14 @@
         </thead>
         <tbody>
             <tr ng-repeat="requisition in vm.filteredRequisitions" ng-click="vm.openRnr(requisition.id)">
-                <td>{{requisition.program.name}}</th>
-                <td>{{requisition.facility.code}}</th>
-                <td>{{requisition.facility.name}}</th>
-                <td>{{requisition.facility.type.name}}</th>
-                <td>{{requisition.processingPeriod.startDate | date:'shortDate'}}</th>
-                <td>{{requisition.processingPeriod.endDate | date:'shortDate'}}</th>
-                <td>{{requisition.createdDate | date:'shortDate'}}</th>
-                <td class="col-emergency">
-                    <span ng-if="requisition.emergency" class="icon-ok"></span>
-                </td>
+                <td>{{requisition.program.name}}</td>
+                <td>{{requisition.facility.code}}</td>
+                <td>{{requisition.facility.name}}</td>
+                <td>{{requisition.facility.type.name}}</td>
+                <td>{{requisition.processingPeriod.startDate | date:'shortDate'}}</td>
+                <td>{{requisition.processingPeriod.endDate | date:'shortDate'}}</td>
+                <td>{{requisition.createdDate | date:'shortDate'}}</td>
+                <td check-cell="requisition.emergency"></td>
             </tr>
         </tbody>
     </table>

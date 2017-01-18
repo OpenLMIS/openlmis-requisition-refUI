@@ -1,9 +1,9 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     angular.module('openlmis-fulfillment', [
-        'order',
+        'order-view',
         'proof-of-delivery-view'
     ]);
 
