@@ -16,5 +16,9 @@
   "authServiceURL": "/",
   "requisitionServiceURL": "/",
   "fulfillmentServiceURL": "/",
-  "pageSize": 10
+  "pageSize": 10,
+  "orderedApplicationDirectories": [
+    "/openlmis/dev-ui",
+    "/openlmis/openlmis-requisition-ui"
+  ]
 }
