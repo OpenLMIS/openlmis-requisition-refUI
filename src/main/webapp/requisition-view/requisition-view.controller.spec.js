@@ -10,7 +10,7 @@
 
 describe('RequisitionViewController', function() {
 
-    var $rootScope, $q, $state, notificationService, confirmService, vm, requisition,
+    var $scope, $q, $state, notificationService, confirmService, vm, requisition,
         loadingModalService, deferred, requisitionUrlFactoryMock;
 
     beforeEach(function() {
@@ -38,7 +38,7 @@ describe('RequisitionViewController', function() {
         inject(function(_$rootScope_, $controller, _$q_, _$state_, _notificationService_,
                         _confirmService_, _loadingModalService_) {
 
-            $rootScope = _$rootScope_;
+            $scope = _$rootScope_.$new();
             $state = _$state_;
             $q = _$q_;
             notificationService = _notificationService_;
@@ -59,7 +59,7 @@ describe('RequisitionViewController', function() {
             requisition.$isInitiated.andReturn(true);
             requisition.$skip.andReturn(deferred.promise);
 
-            vm = $controller('RequisitionViewController', {requisition: requisition});
+            vm = $controller('RequisitionViewController', {$scope: $scope, requisition: requisition});
         });
 
         requisitionUrlFactoryMock.andCallFake(function(url) {
@@ -99,15 +99,15 @@ describe('RequisitionViewController', function() {
         vm.skipRnr();
 
         deferred.resolve();
-        $rootScope.$apply();
+        $scope.$apply();
         loadingDeferred.resolve();
-        $rootScope.$apply();
+        $scope.$apply();
 
         expect(notificationServiceSpy).toHaveBeenCalledWith('msg.requisitionSkipped');
         expect(stateGoSpy).toHaveBeenCalledWith('requisitions.initRnr');
     });
 
-    it('should diplay error message when skip requisition failed', function() {
+    it('should display error message when skip requisition failed', function() {
         var notificationServiceSpy = jasmine.createSpy();
 
         spyOn(notificationService, 'error').andCallFake(notificationServiceSpy);
@@ -115,7 +115,7 @@ describe('RequisitionViewController', function() {
         vm.skipRnr();
 
         deferred.reject();
-        $rootScope.$apply();
+        $scope.$apply();
 
         expect(notificationServiceSpy).toHaveBeenCalledWith('msg.requisitionSkipFailed');
     });

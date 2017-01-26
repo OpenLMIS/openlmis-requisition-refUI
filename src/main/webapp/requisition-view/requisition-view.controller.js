@@ -26,17 +26,18 @@
         '$state', 'requisition', 'requisitionValidator', 'authorizationService',
         'loadingModalService', 'notificationService', 'confirmService', 'REQUISITION_RIGHTS',
         'convertToOrderModalService', 'offlineService', 'localStorageFactory',
-        'requisitionUrlFactory', '$filter'
+        'requisitionUrlFactory', '$scope', '$timeout'
     ];
 
     function RequisitionViewController($state, requisition, requisitionValidator, authorizationService,
                              loadingModalService, notificationService, confirmService,
                              REQUISITION_RIGHTS, convertToOrderModalService, offlineService,
-                             localStorageFactory, requisitionUrlFactory, $filter) {
+                             localStorageFactory, requisitionUrlFactory, $scope, $timeout) {
 
         var vm = this,
+            timeoutPromise,
             onlineOnly = localStorageFactory('onlineOnly'),
-            offlineRequitions = localStorageFactory('requisitions');
+            offlineRequisitions = localStorageFactory('requisitions');
 
         /**
          * @ngdoc property
@@ -78,16 +79,46 @@
         vm.displayApproveAndReject = displayApproveAndReject;
         vm.displayConvertToOrder = displayConvertToOrder;
         vm.displaySkip = displaySkip;
-        vm.changeAvailablity = changeAvailablity;
+        vm.changeAvailability = changeAvailability;
         vm.isOffline = offlineService.isOffline;
         vm.getPrintUrl = getPrintUrl;
         vm.isFullSupplyTabValid = isFullSupplyTabValid;
         vm.isNonFullSupplyTabValid = isNonFullSupplyTabValid;
 
-        function saveRnr() {
+        $scope.$watch('vm.requisition', function() {
+            $timeout.cancel(timeoutPromise);
+            timeoutPromise = $timeout(function() {
+                saveRnr(false);
+            }, 5000);
+        }, true);
+
+        $scope.$on('$stateChangeStart', function() {
+            saveRnr(true);
+        });
+
+         /**
+         * @ngdoc function
+         * @name saveRnr
+         * @methodOf requisition-view.RequisitionViewController
+         *
+         * @description
+         * Responsible for saving requisition on the local storage. If the requisition fails to save,
+         * an error notification will be displayed. Otherwise, a success notification will be
+         * shown once per 30 seconds.
+         *
+         * @param {Boolean} True if requisition save is called on state change.
+         */
+        function saveRnr(onExit) {
+            $timeout.cancel(timeoutPromise);
             vm.requisition.$modified = true;
-            offlineRequitions.put(vm.requisition);
-            notificationService.success('msg.rnr.save.success');
+            offlineRequisitions.put(vm.requisition);
+            if (onExit) {
+                notificationService.success('msg.rnr.save.success');
+            } else {
+                timeoutPromise = $timeout(function() {
+                    notificationService.success('msg.rnr.save.success');
+                }, 25000);
+            }
         }
 
          /**
@@ -100,9 +131,10 @@
          * an error notification will be displayed. Otherwise, a success notification will be shown.
          */
         function syncRnr() {
+            $timeout.cancel(timeoutPromise);
             loadingModalService.open();
             vm.requisition.$modified = false;
-            offlineRequitions.put(vm.requisition);
+            offlineRequisitions.put(vm.requisition);
             save().then(function(response) {
                 notificationService.success('msg.rnr.sync.success');
                 reloadState();
@@ -121,6 +153,7 @@
          * Otherwise, a success notification modal will be shown.
          */
         function submitRnr() {
+            $timeout.cancel(timeoutPromise);
             confirmService.confirm('msg.question.confirmation.submit').then(function() {
                 if (requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();
@@ -154,6 +187,7 @@
          * Otherwise, a success notification modal will be shown.
          */
         function authorizeRnr() {
+            $timeout.cancel(timeoutPromise);
             confirmService.confirm('msg.question.confirmation.authorize').then(function() {
                 if (requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();
@@ -185,6 +219,7 @@
          * Otherwise, a success notification modal will be shown.
          */
         function removeRnr() {
+            $timeout.cancel(timeoutPromise);
             confirmService.confirmDestroy('msg.question.confirmation.deletion').then(function() {
                 var loadingPromise = loadingModalService.open();
                 vm.requisition.$remove().then(function(response) {
@@ -211,6 +246,7 @@
          * Otherwise, a success notification modal will be shown.
          */
         function approveRnr() {
+            $timeout.cancel(timeoutPromise);
             confirmService.confirm('msg.question.confirmation.approve').then(function() {
                 if(requisitionValidator.validateRequisition(requisition)) {
                     var loadingPromise = loadingModalService.open();
@@ -239,6 +275,7 @@
          * Otherwise, a success notification modal will be shown.
          */
         function rejectRnr() {
+            $timeout.cancel(timeoutPromise);
             confirmService.confirm('msg.question.confirmation.reject').then(function() {
                 var loadingPromise = loadingModalService.open();
                 vm.requisition.$reject().then(function(response) {
@@ -264,6 +301,7 @@
          * Otherwise, a success notification modal will be shown.
          */
         function skipRnr() {
+            $timeout.cancel(timeoutPromise);
             confirmService.confirm('msg.question.confirmation.skip', 'button.skipRequisition').then(function() {
                 var loadingPromise = loadingModalService.open();
                 vm.requisition.$skip().then(function(response) {
@@ -413,15 +451,15 @@
             convertToOrderModalService.show(vm.requisition);
         };
 
-        function changeAvailablity(requisition) {
+        function changeAvailability(requisition) {
             if (!requisition.$availableOffline) {
                 onlineOnly.remove(requisition.id);
-                offlineRequitions.put(requisition);
+                offlineRequisitions.put(requisition);
                 requisition.$availableOffline = true;
             } else {
                 confirmService.confirm('msg.question.confirmation.makeOnlineOnly').then(function() {
                     onlineOnly.put(requisition.id);
-                    offlineRequitions.removeBy('id', requisition.id);
+                    offlineRequisitions.removeBy('id', requisition.id);
                     requisition.$availableOffline = false;
                 }, function() {
                     requisition.$availableOffline = true;

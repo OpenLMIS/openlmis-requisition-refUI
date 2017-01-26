@@ -144,7 +144,7 @@
                             program: requisition[0].program.id
                         });
 
-                    resolve(requisition[0], template, approvedProducts, reasons);
+                    resolve(requisition[0], approvedProducts, reasons);
                 }
             }
 
