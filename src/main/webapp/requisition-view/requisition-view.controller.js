@@ -26,13 +26,14 @@
         '$state', 'requisition', 'requisitionValidator', 'authorizationService',
         'loadingModalService', 'notificationService', 'confirmService', 'REQUISITION_RIGHTS',
         'convertToOrderModalService', 'offlineService', 'localStorageFactory',
-        'requisitionUrlFactory', '$scope', '$timeout'
+        'requisitionUrlFactory', '$filter', '$scope', '$timeout'
     ];
 
     function RequisitionViewController($state, requisition, requisitionValidator, authorizationService,
                              loadingModalService, notificationService, confirmService,
                              REQUISITION_RIGHTS, convertToOrderModalService, offlineService,
-                             localStorageFactory, requisitionUrlFactory, $scope, $timeout) {
+                             localStorageFactory, requisitionUrlFactory, $filter, $scope,
+                             $timeout) {
 
         var vm = this,
             timeoutPromise,
@@ -63,7 +64,6 @@
 
         // Functions
 
-        vm.saveRnr = saveRnr;
         vm.syncRnr = syncRnr;
         vm.submitRnr = submitRnr;
         vm.authorizeRnr = authorizeRnr;
