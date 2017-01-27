@@ -72,7 +72,7 @@
         function isLineItem(lineItems, product) {
             var isLineItem = false;
             lineItems.forEach(function(lineItem) {
-                isLineItem = isLineItem || (lineItem.orderableProduct.id === product.product.productId);
+                isLineItem = isLineItem || (lineItem.orderable.id === product.product.productId);
             });
             return isLineItem;
         }

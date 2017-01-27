@@ -95,7 +95,7 @@
                 requestedQuantity: quantity,
                 requestedQuantityExplanation: explanation,
                 pricePerPack: product.pricePerPack,
-                orderableProduct: convertToOrderableProduct(product),
+                orderable: convertToOrderable(product),
                 $deletable: true
             });
         }
@@ -130,7 +130,7 @@
             return product.$visible;
         }
 
-        function convertToOrderableProduct(product) {
+        function convertToOrderable(product) {
             return {
                 id: product.productId,
                 name: product.productName,

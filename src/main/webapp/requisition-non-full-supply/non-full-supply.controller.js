@@ -108,7 +108,7 @@
         function deleteLineItem(lineItem) {
             var id = vm.requisition.requisitionLineItems.indexOf(lineItem);
             if (id > -1) {
-                makeProductVisible(vm.requisition.requisitionLineItems[id].orderableProduct.name);
+                makeProductVisible(vm.requisition.requisitionLineItems[id].orderable.name);
                 vm.requisition.requisitionLineItems.splice(id, 1);
                 vm.paginatedLineItems = loadPaginatedLineItems(filterRequisitionLineItems());
             }
@@ -125,7 +125,7 @@
         function addProduct() {
             addProductModalService.show(vm.requisition.$approvedCategories)
                 .then(function(lineItem) {
-                    lineItem.orderableProduct.programs = [{
+                    lineItem.orderable.programs = [{
                         programId: vm.requisition.program.id,
                         fullSupply: false
                     }];

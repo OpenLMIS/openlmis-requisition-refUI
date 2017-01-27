@@ -40,7 +40,7 @@
             angular.copy(source, this);
 
             angular.forEach(this.proofOfDeliveryLineItems, function(lineItem) {
-                angular.forEach(lineItem.orderLineItem.orderableProduct.programs, function(program) {
+                angular.forEach(lineItem.orderLineItem.orderable.programs, function(program) {
                     if(program.programId === pod.order.program.id) lineItem.$program = program;
                 });
             });
