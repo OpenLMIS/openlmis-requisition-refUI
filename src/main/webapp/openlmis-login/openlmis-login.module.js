@@ -6,6 +6,7 @@
         'openlmis-auth',
         'openlmis-locale',
         'openlmis-modal',
+        'openlmis-config',
         'ui.router'
     ]);
 

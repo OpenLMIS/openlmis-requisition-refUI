@@ -8,6 +8,8 @@
   "authServiceUrl": "/",
   "requisitionServiceUrl": "/",
   "fulfillmentServiceUrl": "/",
+  "authServerClientId": "user-client",
+  "authServerClientSecret": "changeme",
   "orderedBuildDirectories": [
     "/openlmis/dev-ui",
     "/openlmis/openlmis-requisition-ui"
