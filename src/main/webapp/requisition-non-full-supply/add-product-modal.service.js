@@ -132,10 +132,10 @@
 
         function convertToOrderable(product) {
             return {
-                id: product.productId,
-                name: product.productName,
-                productCode: product.productCode,
-                packSize: product.productPackSize,
+                id: product.orderableId,
+                name: product.orderableName,
+                productCode: product.orderableCode,
+                packSize: product.orderablePackSize,
                 $program: {
                     productCategoryDisplayName: product.productCategoryDisplayName,
                     fullSupply: product.fullSupply

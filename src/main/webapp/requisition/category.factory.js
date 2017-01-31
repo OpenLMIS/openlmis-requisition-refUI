@@ -32,13 +32,13 @@
             var categories = {};
 
             products.forEach(function(product) {
-                var category = product.product.productCategoryDisplayName;
+                var category = product.programOrderable.productCategoryDisplayName;
                 if (!isLineItem(lineItems, product)) {
                     if (!categories[category]) {
                         categories[category] = [];
                     }
-                    categories[category].push(product.product);
-                    product.product.$visible = true;
+                    categories[category].push(product.programOrderable);
+                    product.programOrderable.$visible = true;
                 }
             });
 
@@ -72,7 +72,7 @@
         function isLineItem(lineItems, product) {
             var isLineItem = false;
             lineItems.forEach(function(lineItem) {
-                isLineItem = isLineItem || (lineItem.orderable.id === product.product.productId);
+                isLineItem = isLineItem || (lineItem.orderable.id === product.programOrderable.orderableId);
             });
             return isLineItem;
         }
