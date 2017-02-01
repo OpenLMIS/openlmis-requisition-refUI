@@ -25,11 +25,12 @@
 		.controller('ConvertToOrderController', convertToOrderCtrl);
 
 	convertToOrderCtrl.$inject = [
-        '$state', '$stateParams', 'requisitions', 'requisitionService', 'notificationService'
+        '$state', '$stateParams', 'requisitions', 'paginationOptions', 'requisitionService',
+        'notificationService'
     ];
 
-	function convertToOrderCtrl($state, $stateParams, requisitions, requisitionService,
-                                notificationService) {
+	function convertToOrderCtrl($state, $stateParams, requisitions, paginationOptions,
+                                requisitionService, notificationService) {
 
 	    var vm = this;
 
@@ -46,7 +47,8 @@
             filterBy: $stateParams.filterBy,
             filterValue: $stateParams.filterValue,
             sortBy: $stateParams.sortBy,
-            descending: $stateParams.descending
+            descending: $stateParams.descending,
+			size: $stateParams.size
         };
 
         /**
@@ -87,6 +89,7 @@
          * Holds requisitions that can be converted to orders.
          */
         vm.requisitions = requisitions;
+        vm.paginationOptions = paginationOptions;
 
         /**
          * @ngdoc property
@@ -137,7 +140,14 @@
          * Responsible for reloading current state with chosen search parameters.
          */
         function reload() {
-            $state.go($state.current.name, vm.searchParams, {
+            $state.go($state.current.name, {
+                filterBy: $stateParams.filterBy,
+                filterValue: $stateParams.filterValue,
+                sortBy: $stateParams.sortBy,
+                descending: $stateParams.descending,
+    			size: $stateParams.size,
+                page: vm.paginationOptions.currentPage
+            }, {
                 reload: true
             });
         }
@@ -254,8 +264,8 @@
                 && isEmpty(vm.searchParams.filterValue)
                 && isUndefined(vm.searchParams.sortBy)
                 && isUndefined(vm.searchParams.descending)
-                && isUndefined(vm.searchParams.pageNumber)
-                && isUndefined(vm.searchParams.pageSize);
+                && isUndefined(vm.searchParams.page)
+                && isUndefined(vm.searchParams.size);
         }
 
         /**

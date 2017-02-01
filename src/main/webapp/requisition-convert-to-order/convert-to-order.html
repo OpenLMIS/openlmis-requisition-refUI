@@ -61,6 +61,7 @@
 					</tr>
 				</tbody>
 			</table>
+			<openlmis-pagination ng-model="vm.paginationOptions" ng-change="vm.reload()"></openlmis-pagination>
 		</section>
 	</div>
 	<div class="toolbar" ng-if="vm.requisitions.length">

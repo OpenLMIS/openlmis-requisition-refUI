@@ -13,9 +13,14 @@
         .module('requisition-full-supply')
         .controller('FullSupplyController', controller);
 
-    controller.$inject = ['requisition', 'lineItems', 'columns', 'requisitionValidator', '$filter', 'TEMPLATE_COLUMNS', '$state', '$stateParams', 'paginatedListFactory'];
+    controller.$inject = [
+        'requisition', 'fullSupplyLineItems', 'columns', 'requisitionValidator', '$filter',
+        'TEMPLATE_COLUMNS', '$state', '$stateParams', 'paginationFactory', 'paginationOptions'
+    ];
 
-    function controller(requisition, lineItems, columns, requisitionValidator, $filter, TEMPLATE_COLUMNS, $state, $stateParams, paginatedListFactory) {
+    function controller(requisition, fullSupplyLineItems, columns, requisitionValidator, $filter,
+                        TEMPLATE_COLUMNS, $state, $stateParams, paginationFactory,
+                        paginationOptions) {
 
         var vm = this;
 
@@ -23,7 +28,10 @@
         vm.unskipAll = unskipAll;
         vm.isSkipColumn = isSkipColumn;
         vm.changePage = changePage;
-        vm.getCurrentPage = getCurrentPage;
+        vm.isPageValid = isPageValid;
+
+        vm.lineItems = getPage(paginationOptions.currentPage);
+        vm.paginationOptions = getPaginationOptions(paginationOptions.currentPage);
 
         /**
          * @ngdoc property
@@ -35,28 +43,6 @@
          * Holds requisition. This object is shared with the parent and nonFullSupply states.
          */
         vm.requisition = requisition;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-full-supply.FullSupplyController
-         * @name requisition
-         * @type {Object}
-         *
-         * @description
-         * Holds requisition. This object is shared with the parent and nonFullSupply states.
-         */
-        vm.currentPage = $stateParams.page ?  parseInt($stateParams.page) : 1;
-
-        /**
-         * @ngdoc property
-         * @propertyOf requisition-full-supply.FullSupplyController
-         * @name paginatedLineItems
-         * @type {Object}
-         *
-         * @description
-         * Holds line items divided into pages with properties like current page etc.
-         */
-        vm.paginatedLineItems = paginatedListFactory.getPaginatedItems($filter('orderBy')(lineItems, '$program.productCategoryDisplayName'));
 
         /**
          * @ngdoc property
@@ -91,30 +77,18 @@
          *
          * @description
          * Loads line items when page is changed.
-         *
-         * @param {integer} newPage new page number
          */
-        function changePage(newPage) {
+        function changePage(page) {
+            vm.lineItems = getPage(page);
+            vm.paginationOptions = getPaginationOptions(page);
+
             $state.go('requisitions.requisition.fullSupply', {
                 rnr: vm.requisition.id,
-                page: newPage
+                page: vm.paginationOptions.currentPage,
+                size: paginationOptions.size
             }, {
                 notify: false
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @methodOf requisition-full-supply.FullSupplyController
-         * @name changePage
-         *
-         * @description
-         * Loads line items when page is changed.
-         *
-         * @param {integer} newPage new page number
-         */
-        function getCurrentPage() {
-            return vm.paginatedLineItems.getPage(vm.currentPage);
         }
 
         /**
@@ -152,6 +126,31 @@
          */
         function isSkipColumn(column) {
             return column.name === TEMPLATE_COLUMNS.SKIPPED;
+        }
+
+        function getPage(page) {
+            return paginationFactory.getPage($filter('orderBy')(
+                fullSupplyLineItems,
+                '$program.productCategoryDisplayName'
+            ), page, paginationOptions.size);
+        }
+
+        function getPaginationOptions(page) {
+            return {
+                totalPages: paginationOptions.totalPages,
+                totalItems: paginationOptions.totalItems,
+                size: paginationOptions.size,
+                currentPage: page,
+                items: vm.lineItems.length
+            };
+        }
+
+        function isPageValid(number) {
+            return requisitionValidator.areLineItemsValid(paginationFactory.getPage(
+                fullSupplyLineItems,
+                number,
+                paginationOptions.size
+            ));
         }
 
         function setSkipAll(value) {
