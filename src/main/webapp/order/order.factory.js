@@ -17,7 +17,8 @@
 
     function factory(orderService) {
         var factory = {
-            search: search
+            search: search,
+            get: get
         };
         return factory;
 
@@ -42,6 +43,10 @@
                 requestingFacility: requestingFacilityId,
                 program: programId
             });
+        }
+
+        function get(orderId) {
+            return orderService.get(orderId);
         }
     }
 
