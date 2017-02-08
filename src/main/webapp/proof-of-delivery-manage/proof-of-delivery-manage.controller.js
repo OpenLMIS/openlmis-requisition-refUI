@@ -26,12 +26,12 @@
     controller.$inject = [
         'messageService', 'facility', 'user', 'supervisedPrograms', 'homePrograms', 'orderFactory',
         '$state', 'loadingModalService', 'notificationService', 'authorizationService', '$q',
-        'REQUISITION_RIGHTS', 'facilityService', 'supplyingFacilities', 'ORDER_STATUS'
+        'REQUISITION_RIGHTS', 'facilityService', 'ORDER_STATUS'
     ];
 
     function controller(messageService, facility, user, supervisedPrograms, homePrograms,
         orderFactory, $state, loadingModalService, notificationService, authorizationService, $q,
-        REQUISITION_RIGHTS, facilityService, supplyingFacilities, ORDER_STATUS) {
+        REQUISITION_RIGHTS, facilityService, ORDER_STATUS) {
 
         var vm = this;
 
@@ -45,17 +45,6 @@
          * Holds available requesting facilities based on the selected type and/or programs
          */
         vm.requestingFacilities = [];
-
-        /**
-         * @ngdoc property
-         * @propertyOf proof-of-delivery-manage.ProofOfDeliveryManageController
-         * @name supplyingFacilities
-         * @type {Array}
-         *
-         * @description
-         * The list of all supplying facilities available to the user.
-         */
-        vm.supplyingFacilities = supplyingFacilities;
 
         /**
          * @ngdoc property
@@ -167,15 +156,14 @@
          * @name loadOrders
          *
          * @description
-         * Retrieves the list of orders matching the selected supplying facility, requesting
-         * facility and program.
+         * Retrieves the list of orders matching the selected requesting facility and program.
          *
          * @return  {Array} the list of matching orders
          */
         function loadOrders() {
             loadingModalService.open();
             orderFactory.search(
-                vm.supplyingFacilityId,
+                null,
                 vm.requestingFacilityId,
                 vm.selectedProgramId
             ).then(function(orders) {
@@ -233,21 +221,12 @@
         function loadFacilitiesForProgram(selectedProgramId) {
             if (selectedProgramId) {
                 loadingModalService.open();
-                var createRight = authorizationService.getRightByName(REQUISITION_RIGHTS.REQUISITION_CREATE),
-                    authorizeRight = authorizationService.getRightByName(REQUISITION_RIGHTS.REQUISITION_AUTHORIZE),
-                    promises = [];
+                var createRight = authorizationService.getRightByName(REQUISITION_RIGHTS.REQUISITION_CREATE);
 
                 if(createRight) {
-                    promises.push(facilityService.getUserSupervisedFacilities(user.user_id, selectedProgramId, createRight.id))
-                }
-                if(authorizeRight) {
-                    promises.push(facilityService.getUserSupervisedFacilities(user.user_id, selectedProgramId, authorizeRight.id))
-                }
-
-                if(promises.length > 0) {
-                    $q.all(promises)
+                    facilityService.getUserSupervisedFacilities(user.user_id, selectedProgramId, createRight.id)
                     .then(function (requestingFacilities) {
-                        vm.requestingFacilities = requestingFacilities[0].concat(requestingFacilities[1]);
+                        vm.requestingFacilities = requestingFacilities;
                         if (vm.requestingFacilities.length <= 0) {
                             vm.error = messageService.get('msg.no.facility.available');
                         } else {

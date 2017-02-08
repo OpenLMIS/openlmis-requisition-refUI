@@ -6,9 +6,9 @@
         .module('proof-of-delivery-manage')
         .config(routes);
 
-    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS'];
+    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS', 'REQUISITION_RIGHTS'];
 
-    function routes($stateProvider, FULFILLMENT_RIGHTS) {
+    function routes($stateProvider, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS) {
 
         $stateProvider.state('orders.podManage', {
 			showInNavigation: true,
@@ -18,8 +18,10 @@
             controllerAs: 'vm',
             templateUrl: 'proof-of-delivery-manage/proof-of-delivery-manage.html',
             accessRights: [
+                REQUISITION_RIGHTS.REQUISITION_CREATE,
                 FULFILLMENT_RIGHTS.PODS_MANAGE
             ],
+            areAllRightsRequired: true,
             resolve: {
                 facility: function (authorizationService, $q) {
                     var deferred = $q.defer();
@@ -40,11 +42,6 @@
                 },
                 homePrograms: function (programService, user) {
                     return programService.getUserPrograms(user.user_id, true);
-                },
-                supplyingFacilities: function(facilityFactory, authorizationService) {
-                    return facilityFactory.getSupplyingFacilities(
-                        authorizationService.getUser().user_id
-                    );
                 }
             }
         });

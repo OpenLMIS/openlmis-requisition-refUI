@@ -31,7 +31,7 @@
          * Gets orders from the server using orderService and prepares them to be used in
          * controller.
          *
-         * @param   {String}    supplyingFacilityId     (required) the ID of the supplying facility
+         * @param   {String}    supplyingFacilityId     (optional) the ID of the supplying facility
          * @param   {String}    requestingFacilityId    (optional) the ID of the requestingFacility
          * @param   {String}    programId               (optional) the ID of the program
          * @return  {Promise}                           the promise resolving to a list of all
