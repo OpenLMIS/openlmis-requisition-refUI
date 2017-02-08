@@ -42,7 +42,7 @@
          * @type {Array}
          *
          * @description
-         * Holds available requesting facilities based on the selected type and/or programs
+         * Holds available requesting facilities based on the selected type and/or programs.
          */
         vm.requestingFacilities = [];
 
