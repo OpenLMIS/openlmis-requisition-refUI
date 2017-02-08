@@ -17,14 +17,15 @@
     service.$inject = ['$resource', 'fulfillmentUrlFactory', 'dateUtils'];
 
     function service($resource, fulfillmentUrlFactory, dateUtils) {
-        var resource = $resource(fulfillmentUrlFactory('/api/orders/:id'), {}, {
+        var resource = $resource(fulfillmentUrlFactory('/api/orders'), {}, {
             search: {
                 isArray: true,
                 method: 'GET',
                 transformResponse: transformOrder,
                 url: fulfillmentUrlFactory('/api/orders/search')
             },
-            get: {
+            getPod: {
+                isArray: true,
                 method: 'GET',
                 transformResponse: transformPOD,
                 url: fulfillmentUrlFactory('/api/orders/:id/proofOfDeliveries')
@@ -32,7 +33,7 @@
         });
 
         this.search = search;
-        this.get = get;
+        this.getPod = getPod;
 
         /**
          * @ngdoc method
@@ -51,9 +52,20 @@
             return resource.search(params).$promise;
         }
 
-        function get(podId) {
-            return resource.get({
-                id: podId
+        /**
+         * @ngdoc method
+         * @methodOf order.orderService
+         * @name getPod
+         *
+         * @description
+         * Retrieves a list of Proof of Deliveries for the given Order.
+         *
+         * @param   {String}    orderId     the ID of the given order
+         * @return  {Array}                 the list of all PODs for the given order
+         */
+        function getPod(orderId) {
+            return resource.getPod({
+                id: orderId
             }).$promise;
         }
 

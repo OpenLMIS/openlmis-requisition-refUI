@@ -196,7 +196,7 @@
          */
         function openPod(orderId) {
             loadingModalService.open();
-            orderFactory.get(orderId).then(function(pods) {
+            orderFactory.getPod(orderId).then(function(pods) {
                 $state.go('orders.podView', {
                     podId: pods[0].id
                 });
