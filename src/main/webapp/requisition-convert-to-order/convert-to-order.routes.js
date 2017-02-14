@@ -23,7 +23,8 @@
             params: {
                 filterBy: 'all',
                 filterValue: '',
-                size: PAGE_SIZE.toString()
+                size: PAGE_SIZE.toString(),
+                descending: 'true'
             },
             resolve: paginatedRouterProvider.resolve({
                 response: responseResolve

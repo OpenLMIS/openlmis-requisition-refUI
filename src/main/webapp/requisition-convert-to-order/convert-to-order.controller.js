@@ -25,34 +25,32 @@
 		.controller('ConvertToOrderController', convertToOrderCtrl);
 
 	convertToOrderCtrl.$inject = [
-        '$controller', '$stateParams', 'requisitionService', 'notificationService', 'items', 'page',
-        'pageSize', 'totalItems'
+        '$controller', 'requisitionService', 'notificationService', 'items', 'totalItems'
     ];
 
-	function convertToOrderCtrl($controller, $stateParams, requisitionService, notificationService,
-                                items, page, pageSize, totalItems) {
+	function convertToOrderCtrl($controller, requisitionService, notificationService, items,
+                                totalItems) {
 
 	    var vm = this;
 
         $controller('BasePaginationController', {
 			vm: vm,
             items: items,
-			page: page,
-			pageSize: pageSize,
             totalItems: totalItems,
 			externalPagination: true,
 			itemValidator: undefined
 		});
 
-        vm.stateParams.filterBy = $stateParams.filterBy;
-        vm.stateParams.filterValue = $stateParams.filterValue;
-		vm.stateParams.sortBy = $stateParams.sortBy;
-		vm.stateParams.descending = $stateParams.descending;
-
         vm.convertToOrder = convertToOrder;
         vm.getSelected = getSelected;
         vm.toggleSelectAll = toggleSelectAll;
         vm.setSelectAll = setSelectAll;
+
+        vm.sortOptions = {
+            'programName': 'label.programName',
+            'facilityName': 'label.facilityName',
+            'facilityCode': 'label.facilityCode'
+        };
 
         /**
          * @ngdoc property

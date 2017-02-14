@@ -37,14 +37,6 @@
          */
         function resolve(toResolve) {
             if (toResolve.response) {
-                if (!toResolve.page) {
-                    toResolve.page = externalPageResolve;
-                }
-
-                if (!toResolve.pageSize) {
-                    toResolve.pageSize = externalPageSizeResolve;
-                }
-
                 if (!toResolve.totalItems) {
                     toResolve.totalItems = externalTotalItemsResolve;
                 }
@@ -53,48 +45,25 @@
                     toResolve.items = externalItemsResolve;
                 }
             } else {
-                if (!toResolve.pageSize) {
-                    toResolve.pageSize = pageSizeResolve;
-                }
 
                 if (!toResolve.totalItems && toResolve.items) {
                     toResolve.totalItems = totalItemsResolve;
-                }
-
-                if (!toResolve.page) {
-                    toResolve.page = pageResolve;
                 }
             }
 
             return toResolve;
         }
 
-        function externalPageSizeResolve(response) {
-            return response.size;
-        }
-
         function externalTotalItemsResolve(response) {
             return response.totalElements;
-        }
-
-        function externalPageResolve(response) {
-            return response.number;
         }
 
         function externalItemsResolve(response) {
             return response.content;
         }
 
-        function pageSizeResolve($stateParams) {
-            return $stateParams.size ? parseInt($stateParams.size) : PAGE_SIZE;
-        }
-
         function totalItemsResolve(items) {
             return items.length;
-        }
-
-        function pageResolve($stateParams) {
-            return $stateParams.page ? parseInt($stateParams.page) : 0;
         }
     }
 

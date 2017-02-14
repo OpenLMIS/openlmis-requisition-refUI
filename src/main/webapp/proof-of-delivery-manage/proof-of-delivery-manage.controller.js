@@ -23,14 +23,16 @@
         .controller('ProofOfDeliveryManageController', controller);
 
     controller.$inject = [
-        'facility', 'userId', 'supervisedPrograms', 'homePrograms', 'orderFactory', '$state',
-        'loadingModalService', 'notificationService', 'authorizationService', '$q',
-        'REQUISITION_RIGHTS', 'facilityFactory', 'ORDER_STATUS'
+        '$stateParams', 'facility', 'userId', 'supervisedPrograms', 'homePrograms', 'orderFactory',
+        '$state', 'loadingModalService', 'notificationService', 'authorizationService', '$q',
+        'REQUISITION_RIGHTS', 'facilityFactory', 'ORDER_STATUS',
+        'PROOF_OF_DELIVERY_MANAGE_SORT_OPTIONS'
     ];
 
-    function controller(facility, userId, supervisedPrograms, homePrograms, orderFactory, $state,
-        loadingModalService, notificationService, authorizationService, $q, REQUISITION_RIGHTS,
-        facilityFactory, ORDER_STATUS) {
+    function controller($stateParams, facility, userId, supervisedPrograms, homePrograms,
+                        orderFactory, $state, loadingModalService, notificationService,
+                        authorizationService, $q, REQUISITION_RIGHTS, facilityFactory,
+                        ORDER_STATUS, PROOF_OF_DELIVERY_MANAGE_SORT_OPTIONS) {
 
         var vm = this;
 
@@ -38,6 +40,19 @@
         vm.loadOrders = loadOrders;
         vm.updateFacilityType = updateFacilityType;
         vm.loadFacilitiesForProgram = loadFacilitiesForProgram;
+
+        vm.stateParams = $stateParams;
+
+        vm.sortOptions = {
+            'orderCode': 'label.orderNumber',
+            'supplyingFacility.name': 'label.supplyingDepot',
+            'facility.code': 'label.facilityCode',
+            'facility.name': 'label.facilityName',
+            'program.name': 'label.program',
+            'processingPeriod.startDate': 'label.period.start.date',
+            'processingPeriod.endDate': 'label.period.end.date',
+            createdDate: 'label.orderDate'
+        };
 
         /**
          * @ngdoc property

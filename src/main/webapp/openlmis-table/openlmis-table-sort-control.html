@@ -1,0 +1,6 @@
+<form class="form-inline">
+    <label>{{'label.sortBy' | message}}</label>
+    <select ng-model="vm.sortBy" ng-options="option as (vm.displayNames[option] | message) for option in vm.options track by option" required>
+    </select>
+    <button ng-click="vm.toggleOrder()"><i class="fa" ng-class="{'fa-sort-amount-asc': !vm.descending, 'fa-sort-amount-desc': vm.descending}"></i></button>
+</form>

@@ -16,7 +16,7 @@
             label: 'link.viewOrders',
             showInNavigation: true,
             templateUrl: 'order-view/order-view.html',
-            url: '/view',
+            url: '/view?sortBy&descending',
             accessRights: [
                 REQUISITION_RIGHTS.REQUISITION_CREATE,
                 REQUISITION_RIGHTS.REQUISITION_AUTHORIZE,
@@ -24,6 +24,7 @@
                 FULFILLMENT_RIGHTS.ORDERS_VIEW
             ],
             areAllRightsRequired: true,
+            reloadOnSearch: false,
             resolve: {
                 supplyingFacilities: function(facilityFactory, authorizationService) {
                     return facilityFactory.getSupplyingFacilities(

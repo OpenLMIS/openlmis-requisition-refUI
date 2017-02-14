@@ -15,13 +15,15 @@
         .controller('RequisitionSearchController', RequisitionSearchController);
 
     RequisitionSearchController.$inject = [
-        '$rootScope', '$state', 'facilityList', 'requisitionService', 'REQUISITION_STATUS', 'dateUtils',
-        'loadingModalService', 'notificationService', 'offlineService', 'localStorageFactory', 'confirmService'
+        '$stateParams', '$rootScope', '$state', 'facilityList', 'requisitionService',
+        'REQUISITION_STATUS', 'dateUtils', 'loadingModalService', 'notificationService',
+        'offlineService', 'localStorageFactory', 'confirmService'
     ];
 
-    function RequisitionSearchController($rootScope, $state, facilityList, requisitionService,
-                                         REQUISITION_STATUS, dateUtils, loadingModalService,
-                                         notificationService, offlineService, localStorageFactory, confirmService) {
+    function RequisitionSearchController($stateParams, $rootScope, $state, facilityList,
+                                         requisitionService, REQUISITION_STATUS, dateUtils,
+                                         loadingModalService, notificationService, offlineService,
+                                         localStorageFactory, confirmService) {
 
         var vm = this,
             offlineRequisitions = localStorageFactory('requisitions');
@@ -30,16 +32,24 @@
         vm.search = search;
         vm.openRnr = openRnr;
         vm.removeOfflineRequisition = removeOfflineRequisition;
-
         vm.isOfflineDisabled = isOfflineDisabled;
+
         vm.searchOffline = offlineService.isOffline();
         vm.facilities = facilityList;
         vm.statuses = REQUISITION_STATUS.$toList();
         vm.selectedStatuses = [];
 
-        if (!angular.isArray(vm.facilities) || vm.facilities.length < 1) {
-            vm.error = 'msg.facilities.not.found';
-        }
+        vm.stateParams = $stateParams;
+
+        vm.sortOptions = {
+            'program.name': 'label.program',
+            'facility.code': 'label.facilityCode',
+            'facility.name': 'label.facilityName',
+            'processingPeriod.startDate': 'label.period.start.date',
+            'processingPeriod.endDate': 'label.period.end.date',
+            createdDate: 'label.date.submitted',
+            status: 'label.status'
+        };
 
         function isOfflineDisabled() {
             if (offlineService.isOffline()) vm.searchOffline = true;

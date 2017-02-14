@@ -13,11 +13,12 @@
 		$stateProvider.state('requisitions.approvalList', {
 			showInNavigation: true,
 			label: 'link.requisition.approve',
-			url: '/approvalList',
+			url: '/approvalList?sortBy&descending',
 			controller: 'RequisitionApprovalListController',
 			controllerAs: 'vm',
 			templateUrl: 'requisition-approval/requisition-approval-list.html',
 			accessRights: [REQUISITION_RIGHTS.REQUISITION_APPROVE],
+			reloadOnSearch: false,
 			resolve: {
 		        requisitionList: function (requisitionService) {
                     return requisitionService.forApproval();

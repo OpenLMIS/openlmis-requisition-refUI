@@ -2,6 +2,12 @@
 	<div class="page">
 		<h2>{{'label.requisition.convertOrder' | message}}</h2>
 		<section class="openlmis-table-container">
+			<div class="openlmis-table-controls">
+				<openlmis-table-sort-control ng-model="vm.stateParams"
+					ng-change="vm.changePage()"
+					options="vm.sortOptions">
+				</openlmis-table-sort-control>
+			</div>
 			<form class="openlmis-table-filters" ng-submit="vm.changePage()">
 				<label for="searchFor">{{'search.for' | message}}</label>
 				<input id="searchFor" class="filter-value" ng-model="vm.stateParams.filterValue"

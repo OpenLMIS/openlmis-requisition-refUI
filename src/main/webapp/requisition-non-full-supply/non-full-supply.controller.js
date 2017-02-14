@@ -15,20 +15,17 @@
 
     nonFullSupplyController.$inject = [
         '$controller', '$filter', 'requisitionValidator', 'addProductModalService', 'LineItem',
-        'requisition', 'columns', 'items', 'page', 'pageSize',
+        'requisition', 'columns', 'items'
     ];
 
     function nonFullSupplyController($controller, $filter, requisitionValidator,
-                                     addProductModalService, LineItem, requisition, columns, items,
-                                     page, pageSize) {
+                                     addProductModalService, LineItem, requisition, columns, items) {
 
         var vm = this;
 
         $controller('BasePaginationController', {
             vm: vm,
             items: items,
-            page: page,
-            pageSize: pageSize,
             totalItems: undefined,
             externalPagination: false,
             itemValidator: requisitionValidator.isLineItemValid

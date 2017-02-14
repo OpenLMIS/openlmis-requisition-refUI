@@ -13,7 +13,7 @@
         $stateProvider.state('orders.podManage', {
 			showInNavigation: true,
 			label: 'link.orders.podManage',
-            url: '/manage',
+            url: '/manage?sortBy&descending',
             controller: 'ProofOfDeliveryManageController',
             controllerAs: 'vm',
             templateUrl: 'proof-of-delivery-manage/proof-of-delivery-manage.html',
@@ -22,6 +22,7 @@
                 FULFILLMENT_RIGHTS.PODS_MANAGE
             ],
             areAllRightsRequired: true,
+            reloadOnSearch: false,
             resolve: {
                 facility: function(facilityFactory) {
                     return facilityFactory.getUserHomeFacility();

@@ -15,18 +15,30 @@
         .controller('OrderViewController', controller);
 
     controller.$inject = [
-        'supplyingFacilities', 'requestingFacilities', 'programs', 'orderFactory',
-        'loadingModalService', 'notificationService', 'fulfillmentUrlFactory'
+        '$stateParams', 'supplyingFacilities', 'requestingFacilities', 'programs', 'orderFactory',
+        'loadingModalService', 'notificationService', 'fulfillmentUrlFactory',
     ];
 
-    function controller(supplyingFacilities, requestingFacilities, programs, orderFactory,
-                        loadingModalService, notificationService, fulfillmentUrlFactory) {
+    function controller($stateParams, supplyingFacilities, requestingFacilities, programs,
+                        orderFactory, loadingModalService, notificationService,
+                        fulfillmentUrlFactory) {
 
         var vm = this;
 
         vm.loadOrders = loadOrders;
         vm.getPrintUrl = getPrintUrl;
         vm.getDownloadUrl = getDownloadUrl;
+
+        vm.stateParams = $stateParams;
+
+        vm.sortOptions = {
+            orderCode: 'label.orderNumber',
+            'facility.name': 'label.facilityName',
+            'facility.geographicZone.name': 'label.district',
+            'program.name': 'label.program',
+            'supplyingFacility.geographicZone.name': 'label.supplyingDistrict',
+            status: 'label.status'
+        };
 
         /**
          * @ngdoc property

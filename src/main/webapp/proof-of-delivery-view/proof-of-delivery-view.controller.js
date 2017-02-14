@@ -14,18 +14,16 @@
 
     controller.$inject = [
         '$controller', '$state', 'proofOfDeliveryService', 'notificationService',
-        'confirmService', 'ORDER_STATUS', 'pod', 'items', 'page', 'pageSize', 'totalItems'
+        'confirmService', 'ORDER_STATUS', 'pod', 'items', 'totalItems'
     ];
 
     function controller($controller, $state, proofOfDeliveryService, notificationService,
-                        confirmService, ORDER_STATUS, pod, items, page, pageSize, totalItems) {
+                        confirmService, ORDER_STATUS, pod, items, totalItems) {
         var vm = this;
 
         $controller('BasePaginationController', {
             vm: vm,
             page: page,
-            items: items,
-            pageSize: pageSize,
             totalItems: totalItems,
             externalPagination: false,
             itemValidator: pod.isLineItemValid

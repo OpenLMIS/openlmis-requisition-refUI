@@ -12,13 +12,14 @@
 			showInNavigation: true,
 			isOffline: true,
 			label: 'link.requisition.view',
-			url: '/view',
+			url: '/view?sortBy&descending',
 			controller: 'RequisitionSearchController',
 			templateUrl: 'requisition-search/requisition-search.html',
 			accessRights: [
 				REQUISITION_RIGHTS.REQUISITION_VIEW
 			],
 			controllerAs: 'vm',
+			reloadOnSearch: false,
 			resolve: {
 				user: function(authorizationService) {
                     return authorizationService.getUser();

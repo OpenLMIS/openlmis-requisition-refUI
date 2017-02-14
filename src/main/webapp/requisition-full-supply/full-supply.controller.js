@@ -15,25 +15,21 @@
 
     controller.$inject = [
         '$controller', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition', 'columns',
-        'items', 'page', 'pageSize', 'totalItems'
+        'items', 'totalItems'
     ];
 
     function controller($controller, requisitionValidator, TEMPLATE_COLUMNS, requisition, columns,
-                        items, page, pageSize, totalItems) {
+                        items, totalItems) {
 
         var vm = this;
 
         $controller('BasePaginationController', {
             vm: vm,
-            page: page,
-            pageSize: pageSize,
             items: items,
             totalItems: totalItems,
             externalPagination: false,
             itemValidator: requisitionValidator.isLineItemValid
         });
-
-        vm.stateParams.rnr = requisition.id;
 
         vm.skipAll = skipAll;
         vm.unskipAll = unskipAll;

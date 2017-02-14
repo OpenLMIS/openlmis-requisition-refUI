@@ -1,6 +1,9 @@
 <div class="page">
     <h2>{{'label.initiate.requisition' | message}}</h2>
     <section class="openlmis-table-container">
+        <p class="openlmis-table-controls">
+            Sorted by start date.
+        </p>
         <form class="openlmis-table-filters" ng-submit="vm.loadPeriods()">
             <fieldset class="form-group">
                 <legend>{{'label.requisition.facilityType' | message}}</legend>
@@ -71,7 +74,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="period in vm.periodGridData">
+                    <tr ng-repeat="period in vm.periodGridData | orderBy:'startDate'">
                         <td>{{period.name}}</td>
                         <td>{{period.startDate | date:'dd/MM/yyyy'}}</td>
                         <td>{{period.endDate | date:'dd/MM/yyyy'}}</td>

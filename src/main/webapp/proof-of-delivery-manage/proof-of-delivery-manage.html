@@ -1,6 +1,11 @@
 <div class="page">
     <h2>{{'header.managePod' | message}}</h2>
     <section class="openlmis-table-container">
+        <div class="openlmis-table-controls">
+            <openlmis-table-sort-control ng-model="vm.stateParams"
+                options="vm.sortOptions">
+            </openlmis-table-sort-control>
+        </div>
         <form class="openlmis-table-filters" ng-submit="vm.loadOrders()">
             <fieldset class="form-group">
                 <legend>{{'label.requisition.facilityType' | message}}</legend>
@@ -68,12 +73,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="order in vm.orders">
+                <tr ng-repeat="order in vm.orders orderBy:vm.stateParams.sortBy:vm.stateParams.descending">
                     <td>{{order.orderCode}}</td>
                     <td>{{order.supplyingFacility.name}}</td>
                     <td>{{order.facility.code}} - {{order.facility.name}}</td>
                     <td>{{order.program.name}}</td>
-                    <td>{{order.processingPeriod.name}} ({{order.processingPeriod | period}})</td>
+                    <td>{{order.processingPeriod | period:true}}</td>
                     <td>{{order.createdDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
                     <td class="col-emergency">
                         <i ng-class="{'icon-ok': order.emergency}"></i>
