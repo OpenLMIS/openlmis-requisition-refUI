@@ -101,7 +101,14 @@
          */
         function changePage() {
             if (!externalPagination) {
+<<<<<<< HEAD
                 vm.pageItems = getPageItems();
+=======
+                if (customFilter) {
+                    vm.pageItems = customFilter(getPage(vm.stateParams.page));
+                }
+                vm.pageItems = getPage(vm.stateParams.page);
+>>>>>>> 1704edc102f4c2b4418b11bb8eee3d95d0c3dc9d
             }
             updateUrl();
         }
