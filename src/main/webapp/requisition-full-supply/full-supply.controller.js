@@ -40,7 +40,6 @@
         vm.skipAll = skipAll;
         vm.unskipAll = unskipAll;
         vm.isSkipColumn = isSkipColumn;
-        vm.getCategories = getCategories;
 
         /**
          * @ngdoc property
