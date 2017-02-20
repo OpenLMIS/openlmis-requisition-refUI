@@ -15,11 +15,11 @@
 
     controller.$inject = [
         '$state', 'paginationFactory', 'vm', 'page', 'pageSize', 'items', 'totalItems',
-        'externalPagination', 'itemValidator'
+        'externalPagination', 'itemValidator', 'customFilter'
     ];
 
     function controller($state, paginationFactory, vm, page, pageSize, items, totalItems,
-                        externalPagination, itemValidator) {
+                        externalPagination, itemValidator, customFilter) {
 
         vm.updateUrl = updateUrl;
         vm.getPage = getPage;
@@ -72,7 +72,7 @@
          * @description
          * The list of items displayed on the current page.
          */
-        vm.pageItems = externalPagination ? items : getPage(vm.stateParams.page);
+        vm.pageItems = getPageItems();
 
         /**
          * @ngdoc method
@@ -101,6 +101,9 @@
          */
         function changePage() {
             if (!externalPagination) {
+                if (customFilter) {
+                    vm.pageItems = customFilter(getPage(vm.stateParams.page));
+                }
                 vm.pageItems = getPage(vm.stateParams.page);
             }
             updateUrl();
@@ -141,6 +144,15 @@
                 valid = valid && itemValidator(item);
             });
             return valid;
+        }
+
+        function getPageItems() {
+            var items = externalPagination ? items : getPage(vm.stateParams.page);
+
+            if (customFilter) {
+                return customFilter(items);
+            }
+            return items;
         }
     }
 
