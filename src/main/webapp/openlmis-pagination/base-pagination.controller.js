@@ -102,10 +102,6 @@
         function changePage() {
             if (!externalPagination) {
                 vm.pageItems = getPageItems();
-                if (customFilter) {
-                    vm.pageItems = customFilter(getPage(vm.stateParams.page));
-                }
-                vm.pageItems = getPage(vm.stateParams.page);
             }
             updateUrl();
         }
