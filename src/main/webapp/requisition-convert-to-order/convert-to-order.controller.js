@@ -41,7 +41,8 @@
 			pageSize: pageSize,
             totalItems: totalItems,
 			externalPagination: true,
-			itemValidator: undefined
+			itemValidator: undefined,
+			customFilter: undefined
 		});
 
         vm.stateParams.filterBy = $stateParams.filterBy;

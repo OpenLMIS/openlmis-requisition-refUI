@@ -101,10 +101,7 @@
          */
         function changePage() {
             if (!externalPagination) {
-                if (customFilter) {
-                    vm.pageItems = customFilter(getPage(vm.stateParams.page));
-                }
-                vm.pageItems = getPage(vm.stateParams.page);
+                vm.pageItems = getPageItems();
             }
             updateUrl();
         }
@@ -147,7 +144,7 @@
         }
 
         function getPageItems() {
-            var items = externalPagination ? items : getPage(vm.stateParams.page);
+            var items = externalPagination ? vm.items : getPage(vm.stateParams.page);
 
             if (customFilter) {
                 return customFilter(items);

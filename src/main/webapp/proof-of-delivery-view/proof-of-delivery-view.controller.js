@@ -28,7 +28,8 @@
             pageSize: pageSize,
             totalItems: totalItems,
             externalPagination: false,
-            itemValidator: pod.isLineItemValid
+            itemValidator: pod.isLineItemValid,
+            customFilter: undefined
         });
 
         vm.savePod = savePod;

@@ -1,7 +1,7 @@
 describe('BasePaginationController', function() {
 
     var vm, $controller, $state, paginationFactory, page, pageSize, items, totalItems,
-        externalPagination, itemValidator, stateName, stateParams;
+        externalPagination, itemValidator, stateName, stateParams, filter;
 
     beforeEach(function() {
         module('openlmis-pagination');
@@ -200,7 +200,8 @@ describe('BasePaginationController', function() {
             items: items,
             totalItems: totalItems,
             externalPagination: externalPagination,
-            itemValidator: itemValidator
+            itemValidator: itemValidator,
+            customFilter: filter
         });
     }
 

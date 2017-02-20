@@ -31,7 +31,8 @@
             pageSize: pageSize,
             totalItems: undefined,
             externalPagination: false,
-            itemValidator: requisitionValidator.isLineItemValid
+            itemValidator: requisitionValidator.isLineItemValid,
+            customFilter: getCategories
         });
 
         vm.deleteLineItem = deleteLineItem;
@@ -157,6 +158,33 @@
          */
         function getTotalItems() {
             return filterRequisitionLineItems().length;
+        }
+
+        /**
+         * @ngdoc methodOf
+         * @methodOf requisition-non-full-supply.NonFullSupplyController
+         * @name getCategories
+         *
+         * @description
+         * Returns line items grouped by category name and ordered by program's display order.
+         *
+         * @return  {Array}    line items grouped by category and ordered by program's display order
+         */
+        function getCategories(lineItems) {
+            var categories = [];
+
+            angular.forEach(
+                $filter('groupBy')(lineItems, '$program.orderableCategoryDisplayName'),
+                function(lineItems, categoryName) {
+                    categories.push({
+                        name: categoryName,
+                        displayOrder: lineItems[0].$program.orderableCategoryDisplayOrder,
+                        lineItems: $filter('orderBy')(lineItems, '$program.displayOrder')
+                    });
+                }
+            );
+
+            return $filter('orderBy')(categories, 'displayOrder');
         }
 
         function makeProductVisible(productName) {

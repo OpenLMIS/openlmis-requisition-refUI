@@ -40,7 +40,6 @@
         vm.skipAll = skipAll;
         vm.unskipAll = unskipAll;
         vm.isSkipColumn = isSkipColumn;
-        vm.getCategories = getCategories;
 
         /**
          * @ngdoc property
@@ -138,6 +137,16 @@
             return column.name === TEMPLATE_COLUMNS.SKIPPED;
         }
 
+        /**
+         * @ngdoc methodOf
+         * @methodOf requisition-non-full-supply.NonFullSupplyController
+         * @name getCategories
+         *
+         * @description
+         * Returns line items grouped by category name and ordered by program's display order.
+         *
+         * @return  {Array}    line items grouped by category and ordered by program's display order
+         */
         function getCategories(lineItems) {
             var categories = [];
 
