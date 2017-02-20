@@ -14,12 +14,12 @@
         .controller('FullSupplyController', controller);
 
     controller.$inject = [
-        '$controller', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition', 'columns',
-        'items', 'page', 'pageSize', 'totalItems'
+        '$controller', '$filter', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition',
+        'columns', 'items', 'page', 'pageSize', 'totalItems'
     ];
 
-    function controller($controller, requisitionValidator, TEMPLATE_COLUMNS, requisition, columns,
-                        items, page, pageSize, totalItems) {
+    function controller($controller, $filter, requisitionValidator, TEMPLATE_COLUMNS, requisition,
+                        columns, items, page, pageSize, totalItems) {
 
         var vm = this;
 
@@ -30,7 +30,8 @@
             items: items,
             totalItems: totalItems,
             externalPagination: false,
-            itemValidator: requisitionValidator.isLineItemValid
+            itemValidator: requisitionValidator.isLineItemValid,
+            customFilter: getCategories
         });
 
         vm.stateParams.rnr = requisition.id;
@@ -39,6 +40,7 @@
         vm.skipAll = skipAll;
         vm.unskipAll = unskipAll;
         vm.isSkipColumn = isSkipColumn;
+        vm.getCategories = getCategories;
 
         /**
          * @ngdoc property
@@ -136,6 +138,22 @@
             return column.name === TEMPLATE_COLUMNS.SKIPPED;
         }
 
+        function getCategories(lineItems) {
+            var categories = [];
+
+            angular.forEach(
+                $filter('groupBy')(lineItems, '$program.orderableCategoryDisplayName'),
+                function(lineItems, categoryName) {
+                    categories.push({
+                        name: categoryName,
+                        displayOrder: lineItems[0].$program.orderableCategoryDisplayOrder,
+                        lineItems: $filter('orderBy')(lineItems, '$program.displayOrder')
+                    });
+                }
+            );
+
+            return $filter('orderBy')(categories, 'displayOrder');
+        }
 
         /**
          * @ngdoc property
@@ -145,7 +163,7 @@
          *
          * @description
          * Indicated if the skip all button has been clicked.
-         * 
+         *
          */
         vm.skippedAll = false;
 
