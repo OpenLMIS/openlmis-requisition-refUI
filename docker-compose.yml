@@ -10,4 +10,4 @@ services:
       - '.:/app'
   image:
     build: .
-    image: openlmis/requisition-refui
+    image: openlmis/requisition-ui
