@@ -1,5 +1,0 @@
-FROM openlmis/dev-ui
-
-WORKDIR /app
-
-CMD bash
