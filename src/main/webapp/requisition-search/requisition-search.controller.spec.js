@@ -15,7 +15,7 @@
 describe('RequisitionSearchController', function() {
 
     var vm, $q, $rootScope, $controller, $stateParams, $state, offlineService, confirmService,
-        facilities, items, page, pageSize, totalItems;
+        facilities, items, stateParams, totalItems;
 
     beforeEach(function() {
         module('requisition-search');
@@ -49,9 +49,10 @@ describe('RequisitionSearchController', function() {
             'itemOne', 'itemTwo'
         ];
 
-        page = 0;
-
-        pageSize = 10;
+        stateParams = {
+            page: 0,
+            size: 10
+        }
 
         totalItems = 2;
     });
@@ -68,9 +69,8 @@ describe('RequisitionSearchController', function() {
             vm = $controller('RequisitionSearchController', {
                 $controller: $controllerMock,
                 facilities: facilities,
-                items: items,
                 page: page,
-                pageSize: pageSize,
+                stateParams: stateParams,
                 totalItems: totalItems
             });
 
@@ -81,9 +81,8 @@ describe('RequisitionSearchController', function() {
 
             expect($controllerMock).toHaveBeenCalledWith('BasePaginationController', {
                 vm: vm,
-                items: items,
                 page: page,
-                pageSize: pageSize,
+                stateParams: stateParams,
                 totalItems: totalItems,
                 externalPagination: true,
                 itemValidator: undefined
@@ -297,9 +296,8 @@ describe('RequisitionSearchController', function() {
             vm = $controller('RequisitionSearchController', {
                 localStorageFactory: localStorageFactoryMock,
                 facilities: facilities,
-                items: items,
                 page: page,
-                pageSize: pageSize,
+                stateParams: stateParams,
                 totalItems: totalItems
             });
 
@@ -387,10 +385,9 @@ describe('RequisitionSearchController', function() {
 
     function initController() {
         vm = $controller('RequisitionSearchController', {
-            facilities: facilities,
-            items: items,
+            facilities: facilities
             page: page,
-            pageSize: pageSize,
+            stateParams: stateParams,
             totalItems: totalItems
         });
         vm.$onInit();
