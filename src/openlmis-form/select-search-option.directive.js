@@ -56,16 +56,18 @@
             element.on('mousedown', function (event) {
                 if(isPopOut()) {
                     event.stopPropagation();
-                    element.attr('disabled', true);
-                    showModal();
+                    event.preventDefault();
+                    //element.attr('disabled', true);
+                    //showModal();
                 }
             });
 
             element.bind('keydown', function (event) {
                 if(isPopOut() && event.which === 13) {
                     event.stopPropagation();
-                    element.attr('disabled', true);
-                    showModal();
+                    event.preventDefault();
+                    //element.attr('disabled', true);
+                    //showModal();
                 }
             });
 
@@ -91,8 +93,25 @@
             function updateSelect() {
                 if(isPopOut()) {
                     element.addClass('pop-out');
+                    showPopover();
                 } else {
                     element.removeClass('pop-out');
+                }
+            }
+
+            function showPopover() {
+                if (attrs.popover === undefined) {
+                    attrs.$set('popover', '');
+                    attrs.$set('popover-title', 'Select');
+                    attrs.$set('popover-template', 'openlmis-form/select-search-option.html');
+
+                    scope.options = getOptions();
+                    scope.select = selectOption;
+                    scope.findSelectedOption = findSelectedOption;
+
+                    scope.findSelectedOption();
+
+                    $compile(element)(scope);
                 }
             }
 
