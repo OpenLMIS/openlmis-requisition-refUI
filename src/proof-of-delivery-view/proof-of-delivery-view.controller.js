@@ -28,28 +28,30 @@
     .controller('ProofOfDeliveryViewController', controller);
 
     controller.$inject = [
-        '$controller', '$state', 'proofOfDeliveryService', 'notificationService',
-        'confirmService', 'ORDER_STATUS', 'pod', 'items', 'stateParams', 'totalItems'
+        '$state', 'proofOfDeliveryService', 'notificationService',
+        'confirmService', 'ORDER_STATUS', 'pod', 'items'
     ];
 
-    function controller($controller, $state, proofOfDeliveryService, notificationService,
-                        confirmService, ORDER_STATUS, pod, items, stateParams, totalItems)
+    function controller($state, proofOfDeliveryService, notificationService,
+                        confirmService, ORDER_STATUS, pod, items)
     {
         var vm = this;
-
-        $controller('BasePaginationController', {
-            vm: vm,
-            items: items,
-            totalItems: totalItems,
-            stateParams: stateParams,
-            externalPagination: false,
-            itemValidator: pod.isLineItemValid
-        });
 
         vm.savePod = savePod;
         vm.submitPod = submitPod;
         vm.isSubmitted = isSubmitted;
         vm.typeMessage = typeMessage;
+
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name items
+         * @type {Array}
+         *
+         * @description
+         * Holds line items that will be displayed.
+         */
+        vm.items = items;
 
         /**
          * @ngdoc property

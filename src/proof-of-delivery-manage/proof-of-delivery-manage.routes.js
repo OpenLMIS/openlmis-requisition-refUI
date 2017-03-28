@@ -21,9 +21,9 @@
         .module('proof-of-delivery-manage')
         .config(routes);
 
-    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS', 'REQUISITION_RIGHTS', 'paginatedRouterProvider'];
+    routes.$inject = ['$stateProvider', 'FULFILLMENT_RIGHTS', 'REQUISITION_RIGHTS'];
 
-    function routes($stateProvider, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS, paginatedRouterProvider) {
+    function routes($stateProvider, FULFILLMENT_RIGHTS, REQUISITION_RIGHTS) {
 
         $stateProvider.state('orders.podManage', {
 			showInNavigation: true,
@@ -37,7 +37,7 @@
                 FULFILLMENT_RIGHTS.PODS_MANAGE
             ],
             areAllRightsRequired: true,
-            resolve: paginatedRouterProvider.resolve({
+            resolve: {
                 facility: function(facilityFactory) {
                     return facilityFactory.getUserHomeFacility();
                 },
@@ -50,13 +50,15 @@
                 homePrograms: function (programService, userId) {
                     return programService.getUserPrograms(userId, true);
                 },
-                response: function(orderFactory, $stateParams) {
-                    if ($stateParams.program) {
-                        return orderFactory.searchOrdersForManagePod($stateParams);
-                    }
-                    return undefined;
-                }
-            })
+                items: function(paginationService, orderFactory, $stateParams) {
+					return paginationService.registerUrl($stateParams, function(stateParams) {
+                        if(stateParams.program) {
+                            return orderFactory.searchOrdersForManagePod(stateParams);
+                        }
+                        return undefined;
+					});
+				}
+            }
         });
 
     }

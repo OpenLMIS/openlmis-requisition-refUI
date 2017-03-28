@@ -13,35 +13,39 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-
 (function() {
 
 	'use strict';
 
-	angular.module('admin-user-list').config(routes);
+	/**
+     * @ngdoc service
+     * @name openlmis-pagination.component:openlmisPagination
+     *
+     * @description
+     * The OpenLMIS-Pagination component provides controls for API endpoints
+     * that can provide paginated content. This endpoint allows for methods to
+     * add validation for sets of pages.
+     *
+     * There are two edge-cases that are supported by the OpenLMIS-Pagination
+     * component, if there are no results or if a page greater than the total
+     * number of pages is selected.
+     *
+     * @example
+     * ```
+     * <openlmis-pagination>
+     * </openlmis-pagination>
+     * ```
+     */
+	angular
+		.module('openlmis-pagination')
+		.directive('openlmisPagination', component);
 
-	routes.$inject = ['$stateProvider', 'ADMINISTRATION_RIGHTS'];
-
-	function routes($stateProvider, ADMINISTRATION_RIGHTS) {
-
-		$stateProvider.state('administration.users', {
-			showInNavigation: true,
-			label: 'label.users',
-			url: '/users?firstName&lastName&email&page&size',
-			controller: 'UserListController',
-			templateUrl: 'admin-user-list/user-list.html',
-			controllerAs: 'vm',
-			accessRights: [ADMINISTRATION_RIGHTS.USERS_MANAGE],
-			resolve: {
-				users: function(paginationService, userService, $stateParams) {
-					return paginationService.registerUrl($stateParams, function(stateParams) {
-						return userService.search({
-							page: stateParams.page,
-							size: stateParams.size
-						}, stateParams);
-					});
-				}
-			}
-		});
+	function component() {
+		return {
+			controller: 'PaginationController',
+			controllerAs: 'pagination',
+            templateUrl: 'openlmis-pagination/openlmis-pagination.html'
+		};
 	}
+
 })();

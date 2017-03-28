@@ -28,21 +28,67 @@
         .module('openlmis-pagination')
         .controller('PaginationController', controller);
 
-    function controller() {
-        var vm = this;
+    controller.$inject = ['paginationService', '$state', '$stateParams', 'paginationFactory'];
 
-        vm.changePage = changePage;
-        vm.nextPage = nextPage;
-        vm.previousPage = previousPage;
+    function controller(paginationService, $state, $stateParams, paginationFactory) {
 
-        vm.isCurrentPage = isCurrentPage;
-        vm.isFirstPage = isFirstPage;
-        vm.isLastPage = isLastPage;
+        var pagination = this;
 
-        vm.getPages = getPages;
-        vm.getTotalPages = getTotalPages;
+        pagination.changePage = changePage;
+        pagination.nextPage = nextPage;
+        pagination.previousPage = previousPage;
+        pagination.isCurrentPage = isCurrentPage;
+        pagination.isFirstPage = isFirstPage;
+        pagination.isLastPage = isLastPage;
+        pagination.getPages = getPages;
+        pagination.getTotalPages = getTotalPages;
+        pagination.getItemsMessage = getItemsMessage;
+        pagination.isPageValid = isPageValid;
+        pagination.itemValidator = paginationService.getItemValidator();
 
-        vm.getItemsMessage = getItemsMessage;
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-pagination.controller:PaginationController
+         * @name page
+         * @type {Number}
+         *
+         * @description
+         * Holds number of the current page.
+         */
+        pagination.page = paginationService.getPage();
+
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-pagination.controller:PaginationController
+         * @name pageSize
+         * @type {Number}
+         *
+         * @description
+         * Holds maximum number of items that can be displayed.
+         */
+        pagination.pageSize = paginationService.getSize();
+
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-pagination.controller:PaginationController
+         * @name totalItems
+         * @type {Number}
+         *
+         * @description
+         * Holds number of all items.
+         */
+        pagination.totalItems = paginationService.getTotalItems();
+
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-pagination.controller:PaginationController
+         * @name totalItems
+         * @type {Number}
+         *
+         * @description
+         * Holds number of items that are currently showing on screen.
+         */
+        pagination.showingItems = paginationService.getShowingItems();
 
         /**
          * @ngdoc method
@@ -56,8 +102,18 @@
          * @param {Number} newPage New page number
          */
         function changePage(newPage) {
+
             if(newPage >= 0 && newPage < getTotalPages()) {
-                vm.page = newPage;
+
+                var stateParams = angular.copy($stateParams);
+
+                pagination.page = newPage;
+                stateParams.page = newPage;
+
+                $state.go($state.current.name, stateParams, {
+                    reload: true,
+                    notify: true
+                });
             }
         }
 
@@ -70,7 +126,7 @@
          * Changes the current page to next one.
          */
         function nextPage() {
-            changePage(vm.page + 1);
+            changePage(pagination.page + 1);
         }
 
         /**
@@ -82,7 +138,7 @@
          * Changes the current page number to a previous one.
          */
         function previousPage() {
-            changePage(vm.page - 1);
+            changePage(pagination.page - 1);
         }
 
         /**
@@ -96,7 +152,7 @@
          * @param {Number} newPage number of page to check
          */
         function isCurrentPage(pageNumber) {
-            return vm.page === pageNumber;
+            return pagination.page === pageNumber;
         }
 
         /**
@@ -108,7 +164,7 @@
          * Checks if current page is first one on the list.
          */
         function isFirstPage() {
-            return vm.page === 0;
+            return pagination.page === 0;
         }
 
         /**
@@ -120,7 +176,7 @@
          * Checks if current page is last one on the list.
          */
         function isLastPage() {
-            return vm.page === getTotalPages() - 1;
+            return pagination.page === getTotalPages() - 1;
         }
 
         /**
@@ -137,8 +193,40 @@
             return new Array(Math.max(getTotalPages(), 1));
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.controller:PaginationController
+         * @name getTotalPages
+         *
+         * @description
+         * Return number of pages in total.
+         *
+         * @return {Number} number of pages
+         */
         function getTotalPages() {
-            return Math.ceil(vm.totalItems / vm.pageSize);
+            return Math.ceil(pagination.totalItems / pagination.pageSize);
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.controller:PaginationController
+         * @name isPageValid
+         *
+         * @description
+         * Checks if all items on page are valid
+         *
+         * @return {Boolean} true if page is valid, false otherwise
+         */
+        function isPageValid(pageNumber) {
+
+            if(!pagination.itemValidator) return true;
+
+            var valid = true;
+            angular.forEach(paginationService.getPageItems(pageNumber), function(item) {
+                valid = valid && pagination.itemValidator(item);
+            });
+
+            return valid;
         }
 
         /**
@@ -152,7 +240,7 @@
          * @return {Array} the proper items message
          */
         function getItemsMessage() {
-            if(vm.items === 1) return 'msg.match';
+            if(pagination.items === 1) return 'msg.match';
             return 'msg.matches';
         }
     }

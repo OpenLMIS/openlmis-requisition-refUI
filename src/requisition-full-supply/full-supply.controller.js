@@ -28,26 +28,13 @@
         .module('requisition-full-supply')
         .controller('FullSupplyController', controller);
 
-    controller.$inject = [
-        '$controller', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition', 'columns',
-        'items', 'stateParams', 'totalItems'
-    ];
+    controller.$inject = ['$controller', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition', 'columns', 'items'];
 
-    function controller($controller, requisitionValidator, TEMPLATE_COLUMNS, requisition, columns,
-                        items, stateParams, totalItems) {
+    function controller($controller, requisitionValidator, TEMPLATE_COLUMNS, requisition, columns, items) {
 
         var vm = this;
 
-        $controller('BasePaginationController', {
-            vm: vm,
-            items: items,
-            totalItems: totalItems,
-            stateParams: stateParams,
-            externalPagination: false,
-            itemValidator: requisitionValidator.isLineItemValid
-        });
-
-        vm.stateParams.rnr = requisition.id;
+        vm.items = items;
 
         vm.areSkipControlsVisible = areSkipControlsVisible;
         vm.skipAll = skipAll;

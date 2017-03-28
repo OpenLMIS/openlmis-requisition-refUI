@@ -29,24 +29,14 @@
         .controller('NonFullSupplyController', nonFullSupplyController);
 
     nonFullSupplyController.$inject = [
-        '$controller', '$filter', 'requisitionValidator', 'addProductModalService', 'LineItem',
-        'requisition', 'columns', 'items', 'stateParams',
+        '$filter', 'addProductModalService', 'LineItem', 'requisitionValidator',
+        'requisition', 'columns', 'items', '$state'
     ];
 
-    function nonFullSupplyController($controller, $filter, requisitionValidator,
-                                     addProductModalService, LineItem, requisition, columns, items,
-                                     stateParams) {
+    function nonFullSupplyController($filter, addProductModalService, LineItem, requisitionValidator,
+                                    requisition, columns, items, $state) {
 
         var vm = this;
-
-        $controller('BasePaginationController', {
-            vm: vm,
-            items: items,
-            totalItems: undefined,
-            stateParams: stateParams,
-            externalPagination: false,
-            itemValidator: requisitionValidator.isLineItemValid
-        });
 
         vm.deleteLineItem = deleteLineItem;
         vm.addProduct = addProduct;
@@ -57,6 +47,10 @@
          * @ngdoc method
          * @methodOf requisition-non-full-supply.controller:NonFullSupplyController
          * @name isLineItemValid
+         * @ngdoc property
+         * @propertyOf requisition-non-full-supply.controller:NonFullSupplyController
+         * @name items
+         * @type {Array}
          *
          * @description
          * Checks whether any field of the given line item has any error. It does not perform any
@@ -66,6 +60,17 @@
          * @return {Boolean}          true if any of the fields has error, false otherwise
          */
         vm.isLineItemValid = requisitionValidator.isLineItemValid;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-non-full-supply.controller:NonFullSupplyController
+         * @name items
+         * @type {Array}
+         *
+         * @description
+         * Holds all items that will be displayed.
+         */
+        vm.items = items;
 
         /**
          * @ngdoc property
@@ -197,7 +202,7 @@
 
         function reload() {
             vm.items = filterRequisitionLineItems();
-            vm.changePage();
+            $state.reload();
         }
     }
 
