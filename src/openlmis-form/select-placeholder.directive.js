@@ -94,6 +94,7 @@
 
             function displayPlaceholder() {
                 if(!element.children('option[selected="selected"]:not(.placeholder)').length) {
+                    emptyOption.attr('selected', 'selected');
                     emptyOption.show();
                     clearLink.hide();
                 } else if (attrs['required']) {
@@ -151,7 +152,6 @@
 
                 clearLink.insertAfter(element);
                 clearLink.click(clearSelectValue);
-
                 return clearLink;
             }
 

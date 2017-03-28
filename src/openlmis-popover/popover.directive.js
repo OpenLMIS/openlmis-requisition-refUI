@@ -209,7 +209,7 @@
                     }
 
                     if(element.is('select')) {
-                        POPOVER_PLACEMENT = 'auto bottom';
+                        POPOVER_PLACEMENT = 'bottom';
                         trigger = 'click';
                     }
 

@@ -36,20 +36,19 @@
         .module('openlmis-form')
         .directive('select', select);
 
-    select.$inject = ['bootbox', '$rootScope', '$compile', '$templateRequest'];
+    select.$inject = ['bootbox', '$rootScope', '$compile', '$templateRequest', '$popover'];
 
-    function select(bootbox, $rootScope, $compile, $templateRequest) {
+    function select(bootbox, $rootScope, $compile, $templateRequest, $popover) {
         return {
             restrict: 'E',
             replace: false,
-            require: ['select', '?ngModel'],
+            require: ['select', 'ngModel'],
             link: link
         };
 
         function link(scope, element, attrs, ctrls) {
             var selectCtrl = ctrls[0],
-                ngModelCtrl = ctrls[1],
-                modal, modalScope;
+                ngModelCtrl = ctrls[1];
 
             element.off('click');
 
@@ -57,8 +56,7 @@
                 if(isPopOut()) {
                     event.stopPropagation();
                     event.preventDefault();
-                    //element.attr('disabled', true);
-                    //showModal();
+                    element.focus();
                 }
             });
 
@@ -66,14 +64,9 @@
                 if(isPopOut() && event.which === 13) {
                     event.stopPropagation();
                     event.preventDefault();
-                    //element.attr('disabled', true);
-                    //showModal();
+                    element.focus();
+                    element.popover('show');
                 }
-            });
-
-            element.on('$destroy', function() {
-                modal = undefined;
-                if (modalScope) modalScope.$destroy();
             });
 
             updateSelect();
@@ -93,54 +86,42 @@
             function updateSelect() {
                 if(isPopOut()) {
                     element.addClass('pop-out');
-                    showPopover();
+                    addPopover();
                 } else {
                     element.removeClass('pop-out');
                 }
             }
 
-            function showPopover() {
-                if (attrs.popover === undefined) {
-                    attrs.$set('popover', '');
-                    attrs.$set('popover-title', 'Select');
-                    attrs.$set('popover-template', 'openlmis-form/select-search-option.html');
+            function addPopover() {
+                $templateRequest('openlmis-popover/popover.html').then(function(templateHtml){
+                    scope.cssClass = '';
+                    scope.closePopover = closePopover;
+                    var template = $compile(templateHtml)(scope);
+
+                    var popoverConfig = {
+                        template: template,
+                        container: 'body',
+                        placement: 'bottom',
+                        trigger: 'click'
+                    };
 
                     scope.options = getOptions();
                     scope.select = selectOption;
                     scope.findSelectedOption = findSelectedOption;
-
                     scope.findSelectedOption();
 
-                    $compile(element)(scope);
-                }
-            }
-
-            function showModal() {
-                $templateRequest('openlmis-form/select-search-option.html').then(function(template) {
-                    if (modalScope) modalScope.$destroy();
-                    modalScope = $rootScope.$new();
-
-                    modalScope.options = getOptions();
-                    modalScope.select = selectOption;
-                    modalScope.findSelectedOption = findSelectedOption;
-
-                    modalScope.findSelectedOption();
-
-                    modal = bootbox.dialog({
-                        title: getModalTitle(element),
-                        message: $compile(template)(modalScope),
-                        backdrop: true,
-                        onEscape: closeModal
+                    $templateRequest('openlmis-form/select-search-option.html').then(function(html){
+                        var compiledElement = $compile(html)(scope);
+                        popoverConfig.content = compiledElement;
+                        popoverConfig.html = true;
+                        element.popover(popoverConfig);
                     });
                 });
             }
 
-            function closeModal() {
-                element.attr('disabled', false);
-                if (modalScope) modalScope.$destroy();
-                if(modal){
-                    modal.modal('hide');
-                }
+            function closePopover() {
+                element.popover('hide');
+                element.blur();
             }
 
             function findSelectedOption() {
@@ -169,7 +150,7 @@
                 element.children('option[label="' + option.label + '"]').attr('selected', 'selected');
 
                 ngModelCtrl.$setViewValue(selectCtrl.readValue());
-                closeModal();
+                closePopover();
             }
 
             function isPopOut() {

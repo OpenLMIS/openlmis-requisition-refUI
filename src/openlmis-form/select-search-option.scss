@@ -2,6 +2,12 @@
 
     .form-group {
         max-height: 40em;
-        overflow-y: auto;
+        overflow-y: hidden;
     }
+}
+
+.select-content {
+    overflow: auto;
+    max-height: 22.5em;
+    border-bottom: $heading-border-color 1px solid;
 }
