@@ -25,27 +25,28 @@
      * The OpenLMIS-Pagination component provides controls for API endpoints
      * that can provide paginated content. This endpoint allows for methods to
      * add validation for sets of pages.
-     *
-     * There are two edge-cases that are supported by the OpenLMIS-Pagination
-     * component, if there are no results or if a page greater than the total
-     * number of pages is selected.
+     * Pagination component have 2 optional attributes for UI pagination.
+     * When you pass all items to list attribute, variable that is connected
+     * to the paged-list attribute will be automatically filled
+     * with page items after page changes.
      *
      * @example
      * ```
-     * <openlmis-pagination>
-     * </openlmis-pagination>
+     * <openlmis-pagination
+     * 	   list="allItems"
+	 *	   paged-list="items">
+     * <openlmis-pagination/>
      * ```
      */
 	angular
 		.module('openlmis-pagination')
-		.directive('openlmisPagination', component);
-
-	function component() {
-		return {
+		.component('openlmisPagination', {
 			controller: 'PaginationController',
 			controllerAs: 'pagination',
-            templateUrl: 'openlmis-pagination/openlmis-pagination.html'
-		};
-	}
-
+            templateUrl: 'openlmis-pagination/openlmis-pagination.html',
+			bindings: {
+				list: '=?',
+				pagedList: '=?'
+			}
+		});
 })();

@@ -53,7 +53,7 @@
 				items: function(paginationService, requisitionService, $stateParams) {
 					return paginationService.registerUrl($stateParams, function(stateParams) {
 						if (stateParams.facility) {
-							return requisitionService.search(stateParams.offline === 'true', $stateParams);
+							return requisitionService.search(stateParams.offline === 'true', stateParams);
 						}
 						return undefined;
 					});

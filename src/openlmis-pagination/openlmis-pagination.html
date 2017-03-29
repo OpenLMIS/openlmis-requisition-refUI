@@ -1,6 +1,6 @@
 <div class="openlmis-pagination">
 	<div class="pagination-info" ng-if="pagination.totalItems">
-		{{'msg.showing' | message}} {{pagination.showingItems}} {{pagination.getItemsMessage() | message}} {{'msg.outOf' | message}} {{pagination.totalItems}} {{'msg.total' | message}}
+		{{'msg.showingMatchesOutOf' | message: {'items': pagination.showingItems, 'total': pagination.totalItems} }}
 	</div>
 	<div class="pagination-info" ng-if="!pagination.totalItems">
 		{{'msg.showingNoMatches' | message}}

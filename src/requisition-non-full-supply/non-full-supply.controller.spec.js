@@ -217,7 +217,7 @@ describe('NonFullSupplyController', function() {
 
     function initController() {
         vm = $controller('NonFullSupplyController', {
-            items: [],
+            allItems: [],
             columns: [],
             LineItem: LineItem,
             requisition: requisition,

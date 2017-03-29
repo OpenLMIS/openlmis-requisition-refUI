@@ -32,7 +32,7 @@
             controllerAs: 'vm',
             isOffline: true,
             resolve: {
-                items: function(paginationService, requisition, $stateParams, $filter, requisitionValidator) {
+                allItems: function(paginationService, requisition, $stateParams, $filter, requisitionValidator) {
 					return paginationService.registerList(requisitionValidator.isLineItemValid, $stateParams, function() {
                         return $filter('filter')(requisition.requisitionLineItems, {
                             $program: {

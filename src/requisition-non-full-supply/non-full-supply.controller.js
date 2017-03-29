@@ -30,11 +30,11 @@
 
     nonFullSupplyController.$inject = [
         '$filter', 'addProductModalService', 'LineItem', 'requisitionValidator',
-        'requisition', 'columns', 'items', '$state'
+        'requisition', 'columns', 'allItems', '$state'
     ];
 
     function nonFullSupplyController($filter, addProductModalService, LineItem, requisitionValidator,
-                                    requisition, columns, items, $state) {
+                                    requisition, columns, allItems, $state) {
 
         var vm = this;
 
@@ -64,13 +64,24 @@
         /**
          * @ngdoc property
          * @propertyOf requisition-non-full-supply.controller:NonFullSupplyController
+         * @name allItems
+         * @type {Array}
+         *
+         * @description
+         * Holds all requisition line items.
+         */
+        vm.allItems = allItems;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-non-full-supply.controller:NonFullSupplyController
          * @name items
          * @type {Array}
          *
          * @description
          * Holds all items that will be displayed.
          */
-        vm.items = items;
+        vm.items = undefined;
 
         /**
          * @ngdoc property

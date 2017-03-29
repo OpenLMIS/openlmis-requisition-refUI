@@ -28,18 +28,38 @@
         .module('requisition-full-supply')
         .controller('FullSupplyController', controller);
 
-    controller.$inject = ['$controller', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition', 'columns', 'items'];
+    controller.$inject = ['$controller', 'requisitionValidator', 'TEMPLATE_COLUMNS', 'requisition', 'columns', 'allItems'];
 
-    function controller($controller, requisitionValidator, TEMPLATE_COLUMNS, requisition, columns, items) {
+    function controller($controller, requisitionValidator, TEMPLATE_COLUMNS, requisition, columns, allItems) {
 
         var vm = this;
-
-        vm.items = items;
 
         vm.areSkipControlsVisible = areSkipControlsVisible;
         vm.skipAll = skipAll;
         vm.unskipAll = unskipAll;
         vm.isSkipColumn = isSkipColumn;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-full-supply.controller:FullSupplyController
+         * @name allItems
+         * @type {Array}
+         *
+         * @description
+         * Holds all requisition line items.
+         */
+        vm.allItems = allItems;
+
+        /**
+         * @ngdoc property
+         * @propertyOf requisition-full-supply.controller:FullSupplyController
+         * @name items
+         * @type {Array}
+         *
+         * @description
+         * Holds current page of items.
+         */
+        vm.items = undefined;
 
         /**
          * @ngdoc property
@@ -150,7 +170,7 @@
         }
 
         function setSkipAll(value) {
-            angular.forEach(items, function(lineItem) {
+            angular.forEach(vm.items, function(lineItem) {
                 if (lineItem.canBeSkipped(vm.requisition)) {
                     lineItem.skipped = value;
                 }

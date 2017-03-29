@@ -25,6 +25,10 @@ describe('PaginationController', function() {
             $state = $injector.get('$state');
             $controller = $injector.get('$controller');
             paginationService = $injector.get('paginationService');
+            paginationFactory = $injector.get('paginationFactory');
+
+            spyOn(paginationService, 'isExternalPagination').andReturn(true);
+            spyOn(paginationFactory, 'getPage').andReturn([1]);
 
             vm = $controller('PaginationController');
 
@@ -149,8 +153,7 @@ describe('PaginationController', function() {
         it('should return false if item validator returns false', function() {
             vm.totalItems = 1;
             vm.pageSize = 1;
-            spyOn(paginationService, 'getPageItems').andReturn([1]);
-            vm.itemValidator = function() {
+            paginationService.itemValidator = function() {
                 return false;
             };
 
@@ -160,24 +163,11 @@ describe('PaginationController', function() {
         it('should return false if item validator returns true', function() {
             vm.totalItems = 1;
             vm.pageSize = 1;
-            spyOn(paginationService, 'getPageItems').andReturn([1]);
-            vm.itemValidator = function() {
+            paginationService.itemValidator = function() {
                 return true;
             };
 
             expect(vm.isPageValid(0)).toBe(true);
-        });
-    });
-
-    describe('getItemsMessage', function() {
-
-        it('should return correct message if there is more than 1 item', function() {
-            expect(vm.getItemsMessage()).toBe('msg.matches');
-        });
-
-        it('should return correct message if there is more than 1 item', function() {
-            vm.items = 1;
-            expect(vm.getItemsMessage()).toBe('msg.match');
         });
     });
 });

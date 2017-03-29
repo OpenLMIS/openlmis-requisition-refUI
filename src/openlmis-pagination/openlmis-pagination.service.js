@@ -28,9 +28,9 @@
         .module('openlmis-pagination')
         .service('paginationService', service);
 
-    service.$inject = ['$q', '$state', 'PAGE_SIZE', 'paginationFactory'];
+    service.$inject = ['$q', '$state', 'PAGE_SIZE', '$stateParams'];
 
-    function service($q, $state, PAGE_SIZE, paginationFactory) {
+    function service($q, $state, PAGE_SIZE, $stateParams) {
 
         this.registerUrl = registerUrl;
         this.registerList = registerList;
@@ -38,20 +38,28 @@
         this.getPage = getPage;
         this.getTotalItems = getTotalItems;
         this.getShowingItems = getShowingItems;
-        this.getItemValidator = getItemValidator;
         this.isExternalPagination = isExternalPagination;
-        this.getPageItems = getPageItems;
 
         var size,
             page,
             totalItems,
             showingItems,
-            itemValidator,
             externalPagination,
             stateParams,
-            stateName,
-            items;
+            stateName;
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name registerUrl
+         *
+         * @description
+         * Registers all pagination params for API pagination.
+         *
+         * @param  {Object}   newStateParams  state params
+         * @param  {Function} loadItemsMethod method that loads items
+         * @return {Array}                    current page of items
+         */
         function registerUrl(newStateParams, loadItemsMethod) {
 
             var deferred = $q.defer(),
@@ -73,7 +81,6 @@
                     totalItems = response.totalElements;
                     showingItems = response.content.length;
                     externalPagination = true;
-                    itemValidator = null;
                     stateParams = newStateParams;
                     stateName = $state.current.name;
 
@@ -87,58 +94,50 @@
                 totalItems = 0;
                 showingItems = 0;
                 externalPagination = true;
-                itemValidator = null;
                 stateParams = newStateParams;
                 stateName = $state.current.name;
                 deferred.resolve([]);
             }
 
+            this.itemValidator = null;
+
             return deferred.promise;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name registerList
+         *
+         * @description
+         * Registers all pagination params for UI pagination.
+         *
+         * @param  {Object}   itemValidator   validator for items
+         * @param  {Object}   newStateParams  state params
+         * @param  {Function} loadItemsMethod method that loads items
+         * @return {Array}                    current page of items
+         */
         function registerList(itemValidator, newStateParams, loadItemsMethod) {
 
             var deferred = $q.defer(),
-                pageItems;
+                pageItems,
+                items;
 
             if(!newStateParams.page) newStateParams.page = 0;
             if(!newStateParams.size) newStateParams.size = PAGE_SIZE;
 
-            if(shouldChangePageToFirstOne(newStateParams)) {
-                newStateParams.page = 0;
-            }
-
-            if(hasScreenChanged(newStateParams)) {
-                items = loadItemsMethod();
-                totalItems = items.length;
-                externalPagination = false;
-                itemValidator = itemValidator;
-                stateName = $state.current.name;
-            }
+            items = loadItemsMethod();
+            totalItems = items.length;
+            externalPagination = false;
+            this.itemValidator = itemValidator;
+            stateName = $state.current.name;
             size = parseInt(newStateParams.size);
             page = parseInt(newStateParams.page);
-            pageItems = getPageItems(page);
-            showingItems = pageItems.length;
             stateParams = newStateParams;
 
-            deferred.resolve(pageItems);
+            deferred.resolve(items);
 
             return deferred.promise;
-        }
-
-        function hasScreenChanged(params) {
-
-            if(!stateParams) return true;
-
-            var oldStateParams = angular.copy(stateParams),
-                newStateParams = angular.copy(params);
-
-            oldStateParams.page = null;
-            oldStateParams.size = null;
-            newStateParams.page = null;
-            newStateParams.size = null;
-
-            return !angular.equals(oldStateParams, newStateParams);
         }
 
         function shouldChangePageToFirstOne(newStateParams) {
@@ -147,32 +146,74 @@
                 newStateParams.page === stateParams.page;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name getSize
+         *
+         * @description
+         * Returns maximum number of items on page.
+         *
+         * @return {Number} current page size
+         */
         function getSize() {
             return size;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name getPage
+         *
+         * @description
+         * Returns current page number.
+         *
+         * @return {Number} current page number
+         */
         function getPage() {
             return page;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name getTotalItems
+         *
+         * @description
+         * Returns number of all items.
+         *
+         * @return {Number} total items
+         */
         function getTotalItems() {
             return totalItems;
         }
 
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name getShowingItems
+         *
+         * @description
+         * Returns number of items that are showing on the screen.
+         *
+         * @return {Number} showing items number
+         */
         function getShowingItems() {
             return showingItems;
         }
 
-        function getItemValidator() {
-            return itemValidator;
-        }
-
+        /**
+         * @ngdoc method
+         * @methodOf openlmis-pagination.paginationService
+         * @name isExternalPagination
+         *
+         * @description
+         * Indicates if current pagination is API or UI based.
+         *
+         * @return {Boolean} true if is API pagination, false otherwise
+         */
         function isExternalPagination() {
             return externalPagination;
-        }
-
-        function getPageItems(page) {
-            return paginationFactory.getPage(items, page, size);
         }
     }
 

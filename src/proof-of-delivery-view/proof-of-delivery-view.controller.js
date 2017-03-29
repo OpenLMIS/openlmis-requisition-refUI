@@ -29,11 +29,11 @@
 
     controller.$inject = [
         '$state', 'proofOfDeliveryService', 'notificationService',
-        'confirmService', 'ORDER_STATUS', 'pod', 'items'
+        'confirmService', 'ORDER_STATUS', 'pod', 'allItems'
     ];
 
     function controller($state, proofOfDeliveryService, notificationService,
-                        confirmService, ORDER_STATUS, pod, items)
+                        confirmService, ORDER_STATUS, pod, allItems)
     {
         var vm = this;
 
@@ -45,13 +45,24 @@
         /**
          * @ngdoc property
          * @propertyOf proof-of-delivery-view.controller:PodViewController
+         * @name allItems
+         * @type {Array}
+         *
+         * @description
+         * Holds all line items.
+         */
+        vm.allItems = allItems;
+
+        /**
+         * @ngdoc property
+         * @propertyOf proof-of-delivery-view.controller:PodViewController
          * @name items
          * @type {Array}
          *
          * @description
          * Holds line items that will be displayed.
          */
-        vm.items = items;
+        vm.items = undefined;
 
         /**
          * @ngdoc property

@@ -34,6 +34,7 @@
 
         var pagination = this;
 
+        pagination.$onInit = onInit;
         pagination.changePage = changePage;
         pagination.nextPage = nextPage;
         pagination.previousPage = previousPage;
@@ -42,9 +43,18 @@
         pagination.isLastPage = isLastPage;
         pagination.getPages = getPages;
         pagination.getTotalPages = getTotalPages;
-        pagination.getItemsMessage = getItemsMessage;
         pagination.isPageValid = isPageValid;
-        pagination.itemValidator = paginationService.getItemValidator();
+
+        /**
+         * @ngdoc property
+         * @propertyOf openlmis-pagination.controller:PaginationController
+         * @name externalPagination
+         * @type {Boolean}
+         *
+         * @description
+         * Indicates if pagination logic is external.
+         */
+        pagination.externalPagination = undefined;
 
         /**
          * @ngdoc property
@@ -55,7 +65,7 @@
          * @description
          * Holds number of the current page.
          */
-        pagination.page = paginationService.getPage();
+        pagination.page = undefined;
 
         /**
          * @ngdoc property
@@ -66,7 +76,7 @@
          * @description
          * Holds maximum number of items that can be displayed.
          */
-        pagination.pageSize = paginationService.getSize();
+        pagination.pageSize = undefined;
 
         /**
          * @ngdoc property
@@ -77,7 +87,7 @@
          * @description
          * Holds number of all items.
          */
-        pagination.totalItems = paginationService.getTotalItems();
+        pagination.totalItems = undefined
 
         /**
          * @ngdoc property
@@ -88,7 +98,23 @@
          * @description
          * Holds number of items that are currently showing on screen.
          */
-        pagination.showingItems = paginationService.getShowingItems();
+        pagination.showingItems = undefined;
+
+        function onInit() {
+            pagination.externalPagination = paginationService.isExternalPagination();
+            if(pagination.externalPagination) {
+                pagination.page = paginationService.getPage();
+                pagination.pageSize = paginationService.getSize();
+                pagination.totalItems = paginationService.getTotalItems();
+                pagination.showingItems = paginationService.getShowingItems();
+            } else {
+                pagination.page = paginationService.getPage();
+                pagination.pageSize = paginationService.getSize();
+                pagination.totalItems = pagination.list.length;
+                pagination.pagedList = paginationFactory.getPage(pagination.list, pagination.page, pagination.pageSize);
+                pagination.showingItems = pagination.pagedList.length;
+            }
+        }
 
         /**
          * @ngdoc method
@@ -102,8 +128,11 @@
          * @param {Number} newPage New page number
          */
         function changePage(newPage) {
-
             if(newPage >= 0 && newPage < getTotalPages()) {
+
+                if(!pagination.externalPagination) {
+                    pagination.pagedList = paginationFactory.getPage(pagination.list, newPage, pagination.pageSize);
+                }
 
                 var stateParams = angular.copy($stateParams);
 
@@ -111,8 +140,8 @@
                 stateParams.page = newPage;
 
                 $state.go($state.current.name, stateParams, {
-                    reload: true,
-                    notify: true
+                    reload: pagination.externalPagination,
+                    notify: pagination.externalPagination
                 });
             }
         }
@@ -219,30 +248,14 @@
          */
         function isPageValid(pageNumber) {
 
-            if(!pagination.itemValidator) return true;
+            if(!paginationService.itemValidator) return true;
 
             var valid = true;
-            angular.forEach(paginationService.getPageItems(pageNumber), function(item) {
-                valid = valid && pagination.itemValidator(item);
+            angular.forEach(paginationFactory.getPage(pagination.list, pageNumber, pagination.pageSize), function(item) {
+                valid = valid && paginationService.itemValidator(item);
             });
 
             return valid;
         }
-
-        /**
-         * @ngdoc method
-         * @methodOf openlmis-pagination.controller:PaginationController
-         * @name getItemsMessage
-         *
-         * @description
-         * Returns proper messages for 1/more than one showing items.
-         *
-         * @return {Array} the proper items message
-         */
-        function getItemsMessage() {
-            if(pagination.items === 1) return 'msg.match';
-            return 'msg.matches';
-        }
     }
-
 })();
