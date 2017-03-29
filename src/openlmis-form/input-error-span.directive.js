@@ -66,7 +66,8 @@
                 if (!formCtrl.$submitted || ngModelCtrl.$valid) {
                     span.hide();
                 } else {
-                    span.html(messageService.get('error.' + getError(ngModelCtrl.$error)));
+                    var message = messageService.get('error.' + getError(ngModelCtrl.$error));
+                    span.html(message.substr(0, 6) === 'error.' ? ngModelCtrl.$error : message);
                     span.show();
                 }
             }

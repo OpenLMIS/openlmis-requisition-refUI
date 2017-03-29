@@ -36,7 +36,7 @@
                     <td>{{user.email}}</td>
                     <td>
                         <a ng-click="vm.openUserFormModal(user)">{{'link.edit' | message}}</a>
-                        <a ng-click="vm.resetUserPassword(user.id)">{{'link.resetPassword' | message}}</a>
+                        <a ng-click="vm.resetUserPassword(user.username)">{{'link.resetPassword' | message}}</a>
                     </td>
                 </tr>
             </tbody>

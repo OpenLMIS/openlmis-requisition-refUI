@@ -12,20 +12,47 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
     /**
-     * @module admin-user-form-modal
+     * @ngdoc service
+     * @name auth.authUrlFactory
      *
      * @description
-     * Provides modals for creating/updating users.
+     * Supplies application with auth URL.
      */
-    angular.module('admin-user-form-modal', [
-        'auth-user',
-        'openlmis-modal',
-        'referencedata-user'
-    ]);
+    angular
+        .module('auth')
+        .factory('authUrlFactory', factory);
+
+    factory.$inject = ['openlmisUrlFactory', 'pathFactory'];
+
+    function factory(openlmisUrlFactory, pathFactory) {
+
+        var authUrl = '@@AUTH_SERVICE_URL';
+
+        if (authUrl.substr(0, 2) == '@@') {
+            authUrl = '';
+        }
+
+        /**
+         * @ngdoc method
+         * @methodOf auth.authUrlFactory
+         * @name authUrlFactory
+         *
+         * @description
+         * It parses the given URL and appends auth service URL to it.
+         *
+         * @param  {String} url auth URL from grunt file
+         * @return {String}     auth URL
+         */
+        return function(url) {
+            url = pathFactory(authUrl, url);
+            return openlmisUrlFactory(url);
+        };
+    }
 
 })();

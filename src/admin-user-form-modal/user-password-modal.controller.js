@@ -16,16 +16,32 @@
 
     'use strict';
 
-    /**
-     * @module admin-user-form-modal
-     *
-     * @description
-     * Provides modals for creating/updating users.
-     */
-    angular.module('admin-user-form-modal', [
-        'auth-user',
-        'openlmis-modal',
-        'referencedata-user'
-    ]);
+    angular
+        .module('admin-user-form-modal')
+        .controller('UserPasswordModalController', controller);
+
+    controller.$inject = [
+        'user', 'modalDeferred', 'authUserService', 'loadingModalService'
+    ];
+
+    function controller(user, modalDeferred, authUserService, loadingModalService) {
+        var vm = this;
+
+        vm.$onInit = onInit;
+        vm.createPassword = createPassword;
+
+        function onInit() {
+            vm.user = user;
+        }
+
+        function createPassword() {
+            loadingModalService.open(true);
+
+            return authUserService.resetPassword(user.username, user.newPassword)
+                .then(modalDeferred.resolve)
+                .finally(loadingModalService.close);
+        }
+
+    }
 
 })();

@@ -29,11 +29,12 @@
 
     controller.$inject = [
         'user', 'modalDeferred', 'referencedataUserService', 'loadingModalService',
-        'notificationService'
+        'notificationService', 'UserPasswordModal', 'authUserService'
     ];
 
     function controller(user, modalDeferred, referencedataUserService, loadingModalService,
-                        notificationService) {
+                        notificationService, UserPasswordModal, authUserService) {
+
         var vm = this;
 
         vm.$onInit = onInit;
@@ -66,10 +67,25 @@
         function createUser() {
             var loadingPromise = loadingModalService.open(true);
             return referencedataUserService.createUser(vm.user).then(function(user) {
-                loadingPromise.then(function() {
-                    notificationService.success(vm.notification);
-                });
-                modalDeferred.resolve(user);
+                /**authUserService.saveUser({
+                    email: user.email,
+                    enabled: true,
+                    referenceDataUserId: user.id,
+                    role: 'USER',
+                    username: user.username
+                }).then(function() {*/
+                    loadingPromise.then(function() {
+                        notificationService.success(vm.notification);
+                    });
+
+                    if (vm.updateMode) {
+                        modalDeferred.resolve(user);
+                    } else {
+                        (new UserPasswordModal(user.username)).finally(function() {
+                            modalDeferred.resolve(user);
+                        });
+                    }
+                /**}, loadingModalService.close);*/
             }).finally(loadingModalService.close);
         }
 

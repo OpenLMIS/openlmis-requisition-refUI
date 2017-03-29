@@ -17,15 +17,14 @@
     'use strict';
 
     /**
-     * @module admin-user-form-modal
+     * @module auth
      *
      * @description
-     * Provides modals for creating/updating users.
+     * Provides service for communicating with the auth user endpoint.
      */
-    angular.module('admin-user-form-modal', [
-        'auth-user',
-        'openlmis-modal',
-        'referencedata-user'
+    angular.module('auth-user', [
+        'auth',
+        'openlmis-urls'
     ]);
 
 })();

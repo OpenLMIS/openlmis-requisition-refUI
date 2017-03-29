@@ -12,20 +12,19 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
+
 (function() {
 
     'use strict';
 
     /**
-     * @module admin-user-form-modal
+     * @module auth
      *
      * @description
-     * Provides modals for creating/updating users.
+     * Provides URL factory for communicating with the auth service.
      */
-    angular.module('admin-user-form-modal', [
-        'auth-user',
-        'openlmis-modal',
-        'referencedata-user'
+    angular.module('auth', [
+        'openlmis-urls'
     ]);
 
 })();

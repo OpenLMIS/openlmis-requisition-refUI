@@ -28,9 +28,9 @@
 		.module('admin-user-list')
 		.controller('UserListController', controller);
 
-	controller.$inject = ['$state', '$stateParams', 'users', 'confirmService', 'UserFormModal'];
+	controller.$inject = ['$state', '$stateParams', 'users', 'confirmService', 'UserFormModal', 'UserPasswordModal'];
 
-	function controller($state, $stateParams, users, confirmService, UserFormModal) {
+	function controller($state, $stateParams, users, confirmService, UserFormModal, UserPasswordModal) {
 
 		var vm = this;
 
@@ -65,10 +65,8 @@
          *
          * @param {String} userId the user UUID
          */
-		function resetUserPassword(userId) {
-            confirmService.confirm('msg.question.confirmation.resetPassword').then(function() {
-
-            });
+		function resetUserPassword(username) {
+            new UserPasswordModal(username);
 		}
 
 		function search() {
