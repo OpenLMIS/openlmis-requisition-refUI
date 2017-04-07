@@ -28,7 +28,8 @@
         $stateProvider.state('home', {
             url: '/home',
             templateUrl: 'openlmis-home/home.html',
-            priority: 3,
+            // keep home menu always at the first place
+            priority: 999,
             showInNavigation: true,
             label: 'link.home',
             isOffline: true
