@@ -1,5 +1,8 @@
 # OpenLMIS Requisition Reference UI Module
-This repository is the UI for the [OpenLMIS Requisition Service.](https://github.com/OpenLMIS/openlmis-requisition)
+
+_This repository has been depreciated in favor of [requisition-ui](https://github.com/OpenLMIS/openlmis-requisition-ui)._
+
+It had been the UI for the [OpenLMIS Requisition Service.](https://github.com/OpenLMIS/openlmis-requisition)
 
 ## Prerequisites
 * Docker 1.11+
